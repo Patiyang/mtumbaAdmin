@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "387937827780",
+    "firebase_url": "https://mtumbakenny.firebaseio.com",
+    "project_id": "mtumbakenny",
+    "storage_bucket": "mtumbakenny.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:387937827780:android:5253ad949502ddd4844291",
+        "android_client_info": {
+          "package_name": "com.example.foodDelivery"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "387937827780-isk4n7clpb5kpuf3b8mdrquufc1eauvm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDLMENWFUs-ILz4agOl_qlGaEE2Ogdq6RE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "387937827780-isk4n7clpb5kpuf3b8mdrquufc1eauvm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:387937827780:android:3a68392298070a07844291",
+        "android_client_info": {
+          "package_name": "com.example.mtumbaAdmin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "387937827780-isk4n7clpb5kpuf3b8mdrquufc1eauvm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDLMENWFUs-ILz4agOl_qlGaEE2Ogdq6RE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "387937827780-isk4n7clpb5kpuf3b8mdrquufc1eauvm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
