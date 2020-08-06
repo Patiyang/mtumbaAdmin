@@ -7,6 +7,7 @@ class User {
   static const String email = 'adminEmailAddress';
   static const String storeName = 'storeName';
   static const String id = 'id';
+  static const String profilePicture = 'profilePicture';
 
   String userId;
   User({this.userId});

@@ -31,8 +31,6 @@ class _RecoverState extends State<Recover> {
             Form(
               key: formkey,
               child: Column(
-                // crossAxisAlignment: CrossAxisAlignment.center,
-                // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Expanded(
                     child: Container(
@@ -87,23 +85,22 @@ class _RecoverState extends State<Recover> {
                               child: Container(
                                 padding: const EdgeInsets.symmetric(horizontal: 30.0),
                                 child: CustomTextField(
-                                  validator: (v) {
-                                    if (v.isEmpty) {
-                                      return 'Email Cannot be empty';
-                                    }
-                                    Pattern pattern =
-                                        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-                                    RegExp regex = new RegExp(pattern);
-                                    if (!regex.hasMatch(v))
-                                      return 'Please make sure your email address is valid';
-                                    else
-                                      return null;
-                                  },
-                                  controller: recoveryEmail,
-                                  containerColor: grey[300],
-                                  hintColor: grey[700],
-                                  hint: 'Recovery Email',
-                                ),
+                                    validator: (v) {
+                                      if (v.isEmpty) {
+                                        return 'Email Cannot be empty';
+                                      }
+                                      Pattern pattern =
+                                          r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+                                      RegExp regex = new RegExp(pattern);
+                                      if (!regex.hasMatch(v))
+                                        return 'Please make sure your email address is valid';
+                                      else
+                                        return null;
+                                    },
+                                    controller: recoveryEmail,
+                                    containerColor: grey[300],
+                                    hintColor: grey[700],
+                                    hint: 'Recovery Email'),
                               ),
                             ),
                             SizedBox(
@@ -142,10 +139,7 @@ class _RecoverState extends State<Recover> {
             ),
             Visibility(
               visible: loading == true,
-              child: Loading(
-                text: 'Working on It',
-                color: black.withOpacity(.7),
-              ),
+              child: Loading(text: 'Working on It', color: black.withOpacity(.7)),
             )
           ],
         ),

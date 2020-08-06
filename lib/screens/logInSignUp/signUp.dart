@@ -1,7 +1,11 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:mtumbaAdmin/models/users.dart';
 import 'package:mtumbaAdmin/provider/users/userProvider.dart';
 import 'package:mtumbaAdmin/provider/users/usersDatabase.dart';
@@ -25,6 +29,7 @@ class _RegisterState extends State<Register> {
   final TextEditingController emailController = new TextEditingController();
   final TextEditingController phoneNumberController = new TextEditingController();
   final TextEditingController passwordController = new TextEditingController();
+  final ImagePicker _picker = ImagePicker();
 
   final formKey = GlobalKey<FormState>();
   UserProvider userProvider = new UserProvider();
@@ -34,6 +39,11 @@ class _RegisterState extends State<Register> {
   String userName;
   String userEmail;
   String phoneNumber;
+  PickedFile profileImage;
+  // PickedFile _imageFile;
+  File imageToUpload;
+  FirebaseStorage storage = FirebaseStorage.instance;
+
   // String userId;
   bool loading = false;
   @override
@@ -65,7 +75,13 @@ class _RegisterState extends State<Register> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: <Widget>[
-                      CircleAvatar(radius: 50, child: Icon(Icons.image, size: 30)),
+                      GestureDetector(
+                          child: CircleAvatar(
+                            backgroundColor: profileImage != null ? Colors.transparent : orange,
+                            radius: 50,
+                            child: userImage(),
+                          ),
+                          onTap: () => selectProfileImage(_picker.getImage(source: ImageSource.gallery))),
                       SizedBox(height: 10),
                       Container(
                         padding: const EdgeInsets.symmetric(vertical: 1.0, horizontal: 25),
@@ -74,7 +90,6 @@ class _RegisterState extends State<Register> {
                             if (v.isEmpty) {
                               return 'FirstName field cannot be left empty';
                             }
-
                             return null;
                           },
                           // containerColor: white.withOpacity(.8),
@@ -196,13 +211,19 @@ class _RegisterState extends State<Register> {
       setState(() {
         loading = true;
       });
+      String profilePicture;
       userDataBase.getUserByEmail(emailController.text).then((QuerySnapshot snap) async {
         if (snap.documents.length < 1) {
-          await userDataBase.createUser(
-              firstNameController.text, lastNameController.text, emailController.text, passwordController.text);
-          await userProvider
-              .signUp(emailController.text, passwordController.text)
-              .then((value) => Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => Home())));
+          String profileImage = '${emailController.text}${DateTime.now().millisecondsSinceEpoch}.jpg';
+          StorageUploadTask uploadingProfileImage = storage.ref().child(profileImage).putFile(imageToUpload);
+          uploadingProfileImage.onComplete.then((StorageTaskSnapshot snapshot) async {
+            profilePicture = await snapshot.ref.getDownloadURL();
+            await userDataBase.createUser(
+                firstNameController.text, lastNameController.text, emailController.text, passwordController.text, profilePicture);
+            await userProvider
+                .signUp(emailController.text, passwordController.text)
+                .then((value) => Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => Home())));
+          });
         } else {
           setState(() {
             formKey.currentState.reset();
@@ -212,5 +233,25 @@ class _RegisterState extends State<Register> {
         }
       });
     }
+  }
+
+  Widget userImage() {
+    return ClipOval(
+      child: profileImage == null
+          ? Icon(Icons.image)
+          : Image.file(
+              File(profileImage.path),
+              fit: BoxFit.cover,
+              height: 100,
+              width: 100,
+            ),
+    );
+  }
+
+  selectProfileImage(Future<PickedFile> pickImage) async {
+    PickedFile selectedProfileImage = await pickImage;
+    setState(() {
+      profileImage = selectedProfileImage;
+    });
   }
 }

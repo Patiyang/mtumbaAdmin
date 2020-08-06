@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mtumbaAdmin/models/users.dart';
 import 'package:mtumbaAdmin/provider/users/userProvider.dart';
@@ -12,7 +11,6 @@ import 'package:mtumbaAdmin/widgets/customText.dart';
 import 'package:mtumbaAdmin/widgets/loading.dart';
 import 'package:mtumbaAdmin/widgets/textField.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../../styling.dart';
 import '../home.dart';
 

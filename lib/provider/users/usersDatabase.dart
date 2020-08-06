@@ -6,7 +6,7 @@ class UserDataBase {
   Firestore _firestore = Firestore.instance;
   String users = 'users';
 
-  createUser(String firstName, String lastName, String emailAddress, String password) {
+  createUser(String firstName, String lastName, String emailAddress, String password, String profilePicture) {
     var id = Uuid();
     String userId = id.v1();
     try {
@@ -15,7 +15,8 @@ class UserDataBase {
         User.lastName: lastName,
         User.password: password,
         User.email: emailAddress,
-        User.id: userId
+        User.id: userId,
+        User.profilePicture:profilePicture
       });
     } catch (e) {
       print(e.toString());
