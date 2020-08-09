@@ -12,7 +12,7 @@ import 'package:mtumbaAdmin/widgets/loading.dart';
 import 'package:mtumbaAdmin/widgets/textField.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../styling.dart';
-import '../home.dart';
+import '../homeNavigation.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -30,147 +30,161 @@ class _LoginState extends State<Login> {
   String password = '';
   QuerySnapshot snapshot;
   @override
+  void initState() {
+    super.initState();
+    getUserName();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Stack(
-      children: <Widget>[
-        Container(
-          child: Image.asset('images/mtumbaAdmin.jpeg',
-              fit: BoxFit.cover, height: MediaQuery.of(context).size.height, width: MediaQuery.of(context).size.width),
-        ),
-        Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-                colors: [grey.withOpacity(.6), black.withOpacity(.9)], begin: Alignment.topCenter, end: Alignment.bottomCenter),
-          ),
-        ),
-        Form(
-          key: formKey,
-          child: Container(
-            alignment: Alignment.center,
-            height: MediaQuery.of(context).size.height,
-            child: ListView(
-              shrinkWrap: true,
-              primary: false,
-              addAutomaticKeepAlives: false,
-              children: <Widget>[
-                Container(
-                  height: 100,
-                  child: Column(
-                    children: <Widget>[
-                      CustomText(
-                          text: 'Welcome Back', size: 35, fontWeight: FontWeight.w400, color: white, textAlign: TextAlign.left),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      CustomText(text: 'Sign Into Your Store', size: 17, fontWeight: FontWeight.w700, color: white)
-                    ],
+        body: email.length < 1
+            ? Stack(
+                children: <Widget>[
+                  Container(
+                    child: Image.asset('images/mtumbaAdmin.jpeg',
+                        fit: BoxFit.cover, height: MediaQuery.of(context).size.height, width: MediaQuery.of(context).size.width),
                   ),
-                ),
-                Container(
-                  padding: const EdgeInsets.symmetric(vertical: 1.0, horizontal: 25),
-                  child: CustomTextField(
-                    validator: (v) {
-                      if (v.isEmpty) {
-                        return 'Email Cannot be empty';
-                      }
-                      Pattern pattern =
-                          r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-                      RegExp regex = new RegExp(pattern);
-                      if (!regex.hasMatch(v))
-                        return 'Please make sure your email address is valid';
-                      else
-                        return null;
-                    },
-                    // containerColor: white.withOpacity(.8),
-                    // iconOne: Icons.email,
-                    hint: 'Email',
-                    controller: emailController,
-                    textAlign: TextAlign.center,
+                  Container(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                          colors: [grey.withOpacity(.6), black.withOpacity(.9)],
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter),
+                    ),
                   ),
-                ),
-                SizedBox(height: 8),
-                Container(
-                  padding: const EdgeInsets.symmetric(vertical: 1.0, horizontal: 25),
-                  child: CustomTextField(
-                    validator: (v) {
-                      if (v.isEmpty) {
-                        return 'Password field cannot be left empty';
-                      }
-                      if (v.length < 6) {
-                        return 'the password length must be greather than 6';
-                      }
-                      return null;
-                    },
-                    // containerColor: white.withOpacity(.8),
-                    // iconOne: Icons.lock,
-                    hint: 'Password',
-                    controller: passwordController,
-                    obscure: true,
-                  ),
-                ),
-                SizedBox(height: 20),
-                Padding(
-                  padding: const EdgeInsets.only(right: 8.0),
-                  child: GestureDetector(
-                    onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => Recover())),
-                    child: CustomText(
-                        textAlign: TextAlign.right,
-                        text: 'Recover Password?',
-                        color: white,
-                        fontWeight: FontWeight.bold,
-                        size: 17),
-                  ),
-                ),
-                SizedBox(height: 20),
-                Padding(
-                  padding: const EdgeInsets.only(right: 8.0),
-                  child: Container(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 80.0),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.all(Radius.circular(20)),
-                        child: Container(
-                          height: 40,
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(colors: [white, orange]),
+                  Form(
+                    key: formKey,
+                    child: Container(
+                      alignment: Alignment.center,
+                      height: MediaQuery.of(context).size.height,
+                      child: ListView(
+                        shrinkWrap: true,
+                        primary: false,
+                        addAutomaticKeepAlives: false,
+                        children: <Widget>[
+                          Container(
+                            height: 100,
+                            child: Column(
+                              children: <Widget>[
+                                CustomText(
+                                    text: 'Welcome Back',
+                                    size: 35,
+                                    fontWeight: FontWeight.w400,
+                                    color: white,
+                                    textAlign: TextAlign.left),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                CustomText(text: 'Sign Into Your Store', size: 17, fontWeight: FontWeight.w700, color: white)
+                              ],
+                            ),
                           ),
-                          child: MaterialButton(
-                            splashColor: orange,
-                            minWidth: MediaQuery.of(context).size.width * .6,
-                            height: 40,
-                            shape: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
-                            onPressed: signIn,
-                            child: CustomText(text: 'Sign In'),
+                          Container(
+                            padding: const EdgeInsets.symmetric(vertical: 1.0, horizontal: 25),
+                            child: CustomTextField(
+                              validator: (v) {
+                                if (v.isEmpty) {
+                                  return 'Email Cannot be empty';
+                                }
+                                Pattern pattern =
+                                    r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+                                RegExp regex = new RegExp(pattern);
+                                if (!regex.hasMatch(v))
+                                  return 'Please make sure your email address is valid';
+                                else
+                                  return null;
+                              },
+                              // containerColor: white.withOpacity(.8),
+                              // iconOne: Icons.email,
+                              hint: 'Email',
+                              controller: emailController,
+                              textAlign: TextAlign.center,
+                            ),
                           ),
-                        ),
+                          SizedBox(height: 8),
+                          Container(
+                            padding: const EdgeInsets.symmetric(vertical: 1.0, horizontal: 25),
+                            child: CustomTextField(
+                              validator: (v) {
+                                if (v.isEmpty) {
+                                  return 'Password field cannot be left empty';
+                                }
+                                if (v.length < 6) {
+                                  return 'the password length must be greather than 6';
+                                }
+                                return null;
+                              },
+                              // containerColor: white.withOpacity(.8),
+                              // iconOne: Icons.lock,
+                              hint: 'Password',
+                              controller: passwordController,
+                              obscure: true,
+                            ),
+                          ),
+                          SizedBox(height: 20),
+                          Padding(
+                            padding: const EdgeInsets.only(right: 8.0),
+                            child: GestureDetector(
+                              onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => Recover())),
+                              child: CustomText(
+                                  textAlign: TextAlign.right,
+                                  text: 'Recover Password?',
+                                  color: white,
+                                  fontWeight: FontWeight.bold,
+                                  size: 17),
+                            ),
+                          ),
+                          SizedBox(height: 20),
+                          Padding(
+                            padding: const EdgeInsets.only(right: 8.0),
+                            child: Container(
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 80.0),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.all(Radius.circular(20)),
+                                  child: Container(
+                                    height: 40,
+                                    decoration: BoxDecoration(
+                                      gradient: LinearGradient(colors: [white, orange]),
+                                    ),
+                                    child: MaterialButton(
+                                      splashColor: orange,
+                                      minWidth: MediaQuery.of(context).size.width * .6,
+                                      height: 40,
+                                      shape: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
+                                      onPressed: signIn,
+                                      child: CustomText(text: 'Sign In'),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 25,
+                          ),
+                          Container(
+                            alignment: Alignment.center,
+                            child: RichText(
+                                text: TextSpan(text: 'Don\'t have an account? ', children: <TextSpan>[
+                              TextSpan(
+                                  recognizer: TapGestureRecognizer()
+                                    ..onTap = () {
+                                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => Register()));
+                                    },
+                                  text: 'Create One',
+                                  style: TextStyle(fontWeight: FontWeight.bold, decoration: TextDecoration.underline))
+                            ])),
+                          )
+                        ],
                       ),
                     ),
                   ),
-                ),
-                SizedBox(
-                  height: 25,
-                ),
-                Container(
-                  alignment: Alignment.center,
-                  child: RichText(
-                      text: TextSpan(text: 'Don\'t have an account? ', children: <TextSpan>[
-                    TextSpan(
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = () {
-                            Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => Register()));
-                          },
-                        text: 'Create One',
-                        style: TextStyle(fontWeight: FontWeight.bold, decoration: TextDecoration.underline))
-                  ])),
-                )
-              ],
-            ),
-          ),
-        ),
-        Visibility(visible: loading == true, child: Loading())
-      ],
-    ));
+                  Visibility(visible: loading == true, child: Loading())
+                ],
+              )
+            : HomeNavigation());
   }
 
   getUserName() async {
@@ -197,7 +211,7 @@ class _LoginState extends State<Login> {
                 .then((value) => () {
                       email = value == true ? prefs.getString(User.email) : '';
                     })
-                .then((value) => Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => Home())));
+                .then((value) => Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => HomeNavigation())));
           }
         }
         if (snap.documents.length < 1 || password != passwordController.text) {

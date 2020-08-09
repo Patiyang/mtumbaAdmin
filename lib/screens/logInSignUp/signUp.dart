@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/gestures.dart';
@@ -14,7 +13,7 @@ import 'package:mtumbaAdmin/widgets/loading.dart';
 import 'package:mtumbaAdmin/widgets/textField.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../styling.dart';
-import '../home.dart';
+import '../homeNavigation.dart';
 import 'Login.dart';
 
 class Register extends StatefulWidget {
@@ -35,8 +34,8 @@ class _RegisterState extends State<Register> {
   UserDataBase userDataBase = new UserDataBase();
   QuerySnapshot snapshot;
   Firestore firestore = Firestore.instance;
-  String userName;
-  String userEmail;
+  String userName='';
+  String userEmail='';
   String phoneNumber;
   File imageToUpload;
   StorageReference storage = FirebaseStorage.instance.ref();
@@ -45,9 +44,9 @@ class _RegisterState extends State<Register> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Scaffold(
+      child:Scaffold(
           key: scaffoldKey,
-          body: Stack(
+          body: userEmail.length<1? Stack(
             children: <Widget>[
               Container(
                 child: Image.asset('images/mtumbaAdmin.jpeg',
@@ -200,7 +199,7 @@ class _RegisterState extends State<Register> {
               ),
               Visibility(visible: loading == true, child: Loading())
             ],
-          )),
+          ):HomeNavigation()),
     );
   }
 
@@ -231,7 +230,7 @@ class _RegisterState extends State<Register> {
                 firstNameController.text, lastNameController.text, emailController.text, passwordController.text, profilePicture);
             await userProvider
                 .signUp(emailController.text, passwordController.text)
-                .then((value) => Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => Home())));
+                .then((value) => Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => HomeNavigation())));
           }
         } else {
           setState(() {
@@ -243,7 +242,11 @@ class _RegisterState extends State<Register> {
       });
     }
   }
-
+getUserName() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    userEmail = prefs.getString(User.email);
+    print('The email address is ' + userEmail);
+  }
   Widget userImage() {
     return ClipOval(
       child: imageToUpload == null ? Icon(Icons.image) : Image.file(imageToUpload, fit: BoxFit.cover, height: 100, width: 100),
