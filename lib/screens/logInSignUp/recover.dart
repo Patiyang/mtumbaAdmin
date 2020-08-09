@@ -30,111 +30,84 @@ class _RecoverState extends State<Recover> {
           children: <Widget>[
             Form(
               key: formkey,
-              child: Column(
-                children: <Widget>[
-                  Expanded(
-                    child: Container(
-                        alignment: Alignment.topCenter,
-                        child: GestureDetector(
-                            onTap: () => Navigator.pop(context),
-                            child: Icon(
-                              CupertinoIcons.clear,
-                              size: 60,
-                              color: orange,
-                            ))),
-                  ),
-                  Icon(
-                    Icons.lock,
-                    color: Colors.green,
-                    size: 70,
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  CustomText(
-                      textAlign: TextAlign.center,
-                      text: 'Forgot\nYour Password',
-                      color: black,
-                      size: 25,
-                      maxLines: 2,
-                      letterSpacing: 1),
-                  SizedBox(
-                    height: 17,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 30.0),
-                    child: CustomText(
+              child: Center(
+                child: ListView(
+                  shrinkWrap: true,
+                  primary: false,
+                  addAutomaticKeepAlives: false,
+                  children: <Widget>[
+                    GestureDetector(
+                        onTap: () => Navigator.pop(context), child: Icon(CupertinoIcons.clear, size: 60, color: orange)),
+                    SizedBox(height: 100),
+                    Icon(Icons.lock, color: Colors.green, size: 60),
+                    CustomText(
                         textAlign: TextAlign.center,
-                        text: 'Enter your email address below to receive instructions on how to reset your password',
-                        color: grey,
-                        size: 15,
-                        maxLines: 3,
+                        text: 'Forgot\nYour Password',
+                        color: black,
+                        size: 25,
+                        maxLines: 2,
                         letterSpacing: 1),
-                  ),
-                  SizedBox(
-                    height: 30,
-                  ),
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.only(right: 8.0),
-                      child: Container(
-                        child: Column(
-                          children: <Widget>[
-                            FittedBox(
-                              fit: BoxFit.fitHeight,
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 30.0),
-                                child: CustomTextField(
-                                    validator: (v) {
-                                      if (v.isEmpty) {
-                                        return 'Email Cannot be empty';
-                                      }
-                                      Pattern pattern =
-                                          r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-                                      RegExp regex = new RegExp(pattern);
-                                      if (!regex.hasMatch(v))
-                                        return 'Please make sure your email address is valid';
-                                      else
-                                        return null;
-                                    },
-                                    controller: recoveryEmail,
-                                    containerColor: grey[300],
-                                    hintColor: grey[700],
-                                    hint: 'Recovery Email'),
+                    SizedBox(height: 17),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                      child: CustomText(
+                          textAlign: TextAlign.center,
+                          text: 'Enter your email address below to receive instructions on how to reset your password',
+                          color: grey,
+                          size: 15,
+                          maxLines: 3,
+                          letterSpacing: 1),
+                    ),
+                    // SizedBox(height: 30),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 19),
+                      child: Column(
+                        children: <Widget>[
+                          FittedBox(
+                            fit: BoxFit.fitHeight,
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                              child: CustomTextField(
+                                  validator: (v) {
+                                    if (v.isEmpty) {
+                                      return 'Email Cannot be empty';
+                                    }
+                                    Pattern pattern =
+                                        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+                                    RegExp regex = new RegExp(pattern);
+                                    if (!regex.hasMatch(v))
+                                      return 'Please make sure your email address is valid';
+                                    else
+                                      return null;
+                                  },
+                                  controller: recoveryEmail,
+                                  containerColor: grey[300],
+                                  hintColor: grey[700],
+                                  hint: 'Recovery Email'),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          ClipRRect(
+                            borderRadius: BorderRadius.all(Radius.circular(20)),
+                            child: Container(
+                              height: 40,
+                              decoration: BoxDecoration(color: orange),
+                              child: MaterialButton(
+                                splashColor: orange,
+                                minWidth: MediaQuery.of(context).size.width * .6,
+                                height: 20,
+                                onPressed: recoverPassword,
+                                child: CustomText(text: 'Send Password', size: 13),
                               ),
                             ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 80.0),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.all(Radius.circular(20)),
-                                child: Container(
-                                  height: 40,
-                                  decoration: BoxDecoration(color: orange
-                                      // gradient: LinearGradient(colors: [ orange]),
-                                      ),
-                                  child: MaterialButton(
-                                    splashColor: orange,
-                                    minWidth: MediaQuery.of(context).size.width * .6,
-                                    height: 40,
-                                    // shape: BorderRadius.all(radius),
-                                    onPressed: recoverPassword,
-                                    child: CustomText(
-                                      text: 'Send Password',
-                                      size: 17,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
             Visibility(
