@@ -28,6 +28,7 @@ class _LoginState extends State<Login> {
   UserProvider userProvider = new UserProvider();
   String email = '';
   String password = '';
+  String id;
   QuerySnapshot snapshot;
   @override
   void initState() {
@@ -38,7 +39,7 @@ class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: email.length < 1
+        body: email.isEmpty
             ? Stack(
                 children: <Widget>[
                   Container(
@@ -189,7 +190,9 @@ class _LoginState extends State<Login> {
 
   getUserName() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    email = prefs.getString(User.email);
+    setState(() {
+      email = prefs.getString(User.email);
+    });
     print('The email address is ' + email);
   }
 
@@ -204,8 +207,10 @@ class _LoginState extends State<Login> {
         if (snap.documents.length > 0) {
           password = snap.documents[0].data[User.password];
           email = snap.documents[0].data[User.email];
+          id = snap.documents[0].data[User.id];
           if (email == emailController.text && password == passwordController.text) {
             prefs.setString(User.email, email);
+            prefs.setString(User.id, id);
             await userProvider
                 .signIn(emailController.text, passwordController.text)
                 .then((value) => () {

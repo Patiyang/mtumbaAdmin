@@ -8,8 +8,6 @@ class PastOrders extends StatefulWidget {
 class _PastOrdersState extends State<PastOrders> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      
-    );
+    return Text('past orders');
   }
 }

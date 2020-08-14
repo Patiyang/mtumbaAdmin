@@ -8,8 +8,6 @@ class OngoingOrders extends StatefulWidget {
 class _OngoingOrdersState extends State<OngoingOrders> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      
-    );
+    return Text('ongoing orders');
   }
 }

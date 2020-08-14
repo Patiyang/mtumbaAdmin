@@ -12,7 +12,8 @@ class CustomButton extends StatefulWidget {
   final Color buttonColor;
   final double size;
 
-  const CustomButton({Key key, @required this.callback, this.icon, @required this.text, this.color, this.size, this.buttonColor}) : super(key: key);
+  const CustomButton({Key key, @required this.callback, this.icon, @required this.text, this.color, this.size, this.buttonColor})
+      : super(key: key);
 
   @override
   _CustomButtonState createState() => _CustomButtonState();
@@ -33,7 +34,8 @@ class _CustomButtonState extends State<CustomButton> {
               widget.icon,
               color: widget.color,
             ),
-            CustomText(maxLines: 2,
+            CustomText(
+              maxLines: 2,
               text: widget.text,
               color: widget.color,
               fontWeight: FontWeight.normal,
@@ -42,6 +44,24 @@ class _CustomButtonState extends State<CustomButton> {
           ],
         ),
       ),
+    );
+  }
+}
+
+class CustomFlatButton extends StatelessWidget {
+  final String text;
+  final Color color;
+  final VoidCallback callback;
+  final ShapeBorder shape;
+
+  const CustomFlatButton({Key key,@required this.text, this.color, this.callback, this.shape}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return FlatButton(shape: shape,
+      onPressed: callback,
+      color: color,
+      child: CustomText(text: text),
     );
   }
 }

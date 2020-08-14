@@ -8,8 +8,6 @@ class CancelledOrders extends StatefulWidget {
 class _CancelledOrdersState extends State<CancelledOrders> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      
-    );
+    return Text('cancelled orders');
   }
 }

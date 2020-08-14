@@ -34,8 +34,8 @@ class _RegisterState extends State<Register> {
   UserDataBase userDataBase = new UserDataBase();
   QuerySnapshot snapshot;
   Firestore firestore = Firestore.instance;
-  String userName='';
-  String userEmail='';
+  String userName = '';
+  String userEmail = '';
   String phoneNumber;
   File imageToUpload;
   StorageReference storage = FirebaseStorage.instance.ref();
@@ -44,162 +44,166 @@ class _RegisterState extends State<Register> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child:Scaffold(
+      child: Scaffold(
           key: scaffoldKey,
-          body: userEmail.length<1? Stack(
-            children: <Widget>[
-              Container(
-                child: Image.asset('images/mtumbaAdmin.jpeg',
-                    fit: BoxFit.cover, height: MediaQuery.of(context).size.height, width: MediaQuery.of(context).size.width),
-              ),
-              Container(
-                decoration: BoxDecoration(
-                    gradient: LinearGradient(colors: [
-                  grey.withOpacity(.6),
-                  black.withOpacity(.9),
-                ], begin: Alignment.topCenter, end: Alignment.bottomCenter)),
-              ),
-              Form(
-                key: formKey,
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 0.0),
-                  child: SingleChildScrollView(
-                    // physics: BouncingScrollPhysics(),
-                    child: Container(
-                      alignment: Alignment.center,
-                      height: MediaQuery.of(context).size.height,
-                      child: ListView(
-                        shrinkWrap: true,
-                        primary: false,
-                        addAutomaticKeepAlives: false,
-                        children: <Widget>[
-                          GestureDetector(
-                              child: CircleAvatar(
-                                // backgroundColor: profileImage != null ? Colors.transparent : orange[100],
-                                radius: 50,
-                                child: userImage(),
-                              ),
-                              // ignore: deprecated_member_use
-                              onTap: () => selectProfileImage(ImagePicker.pickImage(source: ImageSource.gallery))),
-                          SizedBox(height: 10),
-                          Container(
-                            padding: const EdgeInsets.symmetric(vertical: 1.0, horizontal: 25),
-                            child: CustomTextField(
-                              validator: (v) {
-                                if (v.isEmpty) {
-                                  return 'FirstName field cannot be left empty';
-                                }
-                                return null;
-                              },
-                              // containerColor: white.withOpacity(.8),
-                              iconOne: Icons.person,
-                              hint: 'FirstName',
-                              controller: firstNameController,
-                            ),
-                          ),
-                          SizedBox(height: 8),
-                          Container(
-                            padding: const EdgeInsets.symmetric(vertical: 1.0, horizontal: 25),
-                            child: CustomTextField(
-                              validator: (v) {
-                                if (v.isEmpty) {
-                                  return 'laseName field cannot be left empty';
-                                }
-                                return null;
-                              },
-                              // containerColor: white.withOpacity(.8),
-                              hint: 'LastName',
-                              controller: lastNameController,
-                            ),
-                          ),
-                          SizedBox(height: 8),
-                          Container(
-                            padding: const EdgeInsets.symmetric(vertical: 1.0, horizontal: 25),
-                            child: CustomTextField(
-                              validator: (v) {
-                                if (v.isEmpty) {
-                                  return 'Email Cannot be empty';
-                                }
-                                Pattern pattern =
-                                    r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-                                RegExp regex = new RegExp(pattern);
-                                if (!regex.hasMatch(v))
-                                  return 'Please make sure your email address is valid';
-                                else
-                                  return null;
-                              },
-                              // containerColor: white.withOpacity(.8),
-                              iconOne: Icons.email,
-                              hint: 'Email',
-                              controller: emailController,
-                            ),
-                          ),
-                          SizedBox(height: 8),
-                          Container(
-                            padding: const EdgeInsets.symmetric(vertical: 1.0, horizontal: 25),
-                            child: CustomTextField(
-                              validator: (v) {
-                                if (v.isEmpty) {
-                                  return 'Password field cannot be left empty';
-                                }
-                                if (v.length < 6) {
-                                  return 'the password length must be greather than 6';
-                                }
-                                return null;
-                              },
-                              // containerColor: white.withOpacity(.8),
-                              iconOne: Icons.lock,
-                              hint: 'Password',
-                              controller: passwordController,
-                              obscure: true,
-                            ),
-                          ),
-                          SizedBox(height: 20),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 80.0),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.all(Radius.circular(20)),
-                              child: Container(
-                                height: 40,
-                                decoration: BoxDecoration(
-                                  gradient: LinearGradient(colors: [white, orange]),
-                                ),
-                                child: MaterialButton(
-                                  splashColor: orange,
-                                  minWidth: MediaQuery.of(context).size.width * .6,
-                                  height: 40,
-                                  shape: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
-                                  onPressed: signUp,
-                                  child: CustomText(text: 'Sign Up'),
-                                ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 25,
-                          ),
-                          Container(
+          body: userEmail.length < 1
+              ? Stack(
+                  children: <Widget>[
+                    Container(
+                      child: Image.asset('images/mtumbaAdmin.jpeg',
+                          fit: BoxFit.cover,
+                          height: MediaQuery.of(context).size.height,
+                          width: MediaQuery.of(context).size.width),
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                          gradient: LinearGradient(colors: [
+                        grey.withOpacity(.6),
+                        black.withOpacity(.9),
+                      ], begin: Alignment.topCenter, end: Alignment.bottomCenter)),
+                    ),
+                    Form(
+                      key: formKey,
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 0.0),
+                        child: SingleChildScrollView(
+                          // physics: BouncingScrollPhysics(),
+                          child: Container(
                             alignment: Alignment.center,
-                            child: RichText(
-                                text: TextSpan(text: 'Already have an account? ', children: <TextSpan>[
-                              TextSpan(
-                                  recognizer: TapGestureRecognizer()
-                                    ..onTap = () {
-                                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => Login()));
+                            height: MediaQuery.of(context).size.height,
+                            child: ListView(
+                              shrinkWrap: true,
+                              primary: false,
+                              addAutomaticKeepAlives: false,
+                              children: <Widget>[
+                                GestureDetector(
+                                    child: CircleAvatar(
+                                      // backgroundColor: profileImage != null ? Colors.transparent : orange[100],
+                                      radius: 50,
+                                      child: userImage(),
+                                    ),
+                                    // ignore: deprecated_member_use
+                                    onTap: () => selectProfileImage(ImagePicker.pickImage(source: ImageSource.gallery))),
+                                SizedBox(height: 10),
+                                Container(
+                                  padding: const EdgeInsets.symmetric(vertical: 1.0, horizontal: 25),
+                                  child: CustomTextField(
+                                    validator: (v) {
+                                      if (v.isEmpty) {
+                                        return 'FirstName field cannot be left empty';
+                                      }
+                                      return null;
                                     },
-                                  text: 'Sign In',
-                                  style: TextStyle(fontWeight: FontWeight.bold, decoration: TextDecoration.underline))
-                            ])),
-                          )
-                        ],
+                                    // containerColor: white.withOpacity(.8),
+                                    iconOne: Icons.person,
+                                    hint: 'FirstName',
+                                    controller: firstNameController,
+                                  ),
+                                ),
+                                SizedBox(height: 8),
+                                Container(
+                                  padding: const EdgeInsets.symmetric(vertical: 1.0, horizontal: 25),
+                                  child: CustomTextField(
+                                    validator: (v) {
+                                      if (v.isEmpty) {
+                                        return 'laseName field cannot be left empty';
+                                      }
+                                      return null;
+                                    },
+                                    // containerColor: white.withOpacity(.8),
+                                    hint: 'LastName',
+                                    controller: lastNameController,
+                                  ),
+                                ),
+                                SizedBox(height: 8),
+                                Container(
+                                  padding: const EdgeInsets.symmetric(vertical: 1.0, horizontal: 25),
+                                  child: CustomTextField(
+                                    validator: (v) {
+                                      if (v.isEmpty) {
+                                        return 'Email Cannot be empty';
+                                      }
+                                      Pattern pattern =
+                                          r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+                                      RegExp regex = new RegExp(pattern);
+                                      if (!regex.hasMatch(v))
+                                        return 'Please make sure your email address is valid';
+                                      else
+                                        return null;
+                                    },
+                                    // containerColor: white.withOpacity(.8),
+                                    iconOne: Icons.email,
+                                    hint: 'Email',
+                                    controller: emailController,
+                                  ),
+                                ),
+                                SizedBox(height: 8),
+                                Container(
+                                  padding: const EdgeInsets.symmetric(vertical: 1.0, horizontal: 25),
+                                  child: CustomTextField(
+                                    validator: (v) {
+                                      if (v.isEmpty) {
+                                        return 'Password field cannot be left empty';
+                                      }
+                                      if (v.length < 6) {
+                                        return 'the password length must be greather than 6';
+                                      }
+                                      return null;
+                                    },
+                                    // containerColor: white.withOpacity(.8),
+                                    iconOne: Icons.lock,
+                                    hint: 'Password',
+                                    controller: passwordController,
+                                    obscure: true,
+                                  ),
+                                ),
+                                SizedBox(height: 20),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 80.0),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                                    child: Container(
+                                      height: 40,
+                                      decoration: BoxDecoration(
+                                        gradient: LinearGradient(colors: [white, orange]),
+                                      ),
+                                      child: MaterialButton(
+                                        splashColor: orange,
+                                        minWidth: MediaQuery.of(context).size.width * .6,
+                                        height: 40,
+                                        shape: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
+                                        onPressed: signUp,
+                                        child: CustomText(text: 'Sign Up'),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 25,
+                                ),
+                                Container(
+                                  alignment: Alignment.center,
+                                  child: RichText(
+                                      text: TextSpan(text: 'Already have an account? ', children: <TextSpan>[
+                                    TextSpan(
+                                        recognizer: TapGestureRecognizer()
+                                          ..onTap = () {
+                                            Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => Login()));
+                                          },
+                                        text: 'Sign In',
+                                        style: TextStyle(fontWeight: FontWeight.bold, decoration: TextDecoration.underline))
+                                  ])),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                ),
-              ),
-              Visibility(visible: loading == true, child: Loading())
-            ],
-          ):HomeNavigation()),
+                    Visibility(visible: loading == true, child: Loading())
+                  ],
+                )
+              : HomeNavigation()),
     );
   }
 
@@ -209,7 +213,7 @@ class _RegisterState extends State<Register> {
     if (imageToUpload == null) {
       scaffoldKey.currentState.showSnackBar(SnackBar(
           content: Text(
-        'The image field cannot be empty',
+        'The image cannot be empty',
         style: TextStyle(color: Colors.red),
         textAlign: TextAlign.center,
       )));
@@ -222,7 +226,6 @@ class _RegisterState extends State<Register> {
       userDataBase.getUserByEmail(emailController.text).then((QuerySnapshot snap) async {
         if (snap.documents.length < 1) {
           String imageName = '${emailController.text}${DateTime.now().millisecondsSinceEpoch}.jpg';
-
           StorageTaskSnapshot snap = await storage.child('images/$imageName').putFile(imageToUpload).onComplete;
           if (snap.error == null) {
             profilePicture = await snap.ref.getDownloadURL();
@@ -242,11 +245,13 @@ class _RegisterState extends State<Register> {
       });
     }
   }
-getUserName() async {
+
+  getUserName() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     userEmail = prefs.getString(User.email);
     print('The email address is ' + userEmail);
   }
+
   Widget userImage() {
     return ClipOval(
       child: imageToUpload == null ? Icon(Icons.image) : Image.file(imageToUpload, fit: BoxFit.cover, height: 100, width: 100),
