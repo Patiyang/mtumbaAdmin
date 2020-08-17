@@ -13,10 +13,7 @@ class NewOrdersState extends State<NewOrders> {
   UserProvider provider = new UserProvider();
   @override
   Widget build(BuildContext context) {
-    return MaterialButton(
-      onPressed: logout,
-      child: Text('data'),
-    );
+    return Text('data');
   }
 
   logout() async {

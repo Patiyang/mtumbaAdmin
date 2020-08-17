@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mtumbaAdmin/screens/manageItems/addBrand.dart';
 import 'package:mtumbaAdmin/screens/manageItems/addCategory.dart';
-import 'package:mtumbaAdmin/screens/manageItems/addItem.dart';
+import 'package:mtumbaAdmin/screens/manageItems/addClothing.dart';
 import 'package:mtumbaAdmin/styling.dart';
 import 'package:mtumbaAdmin/widgets/customButton.dart';
 
@@ -18,7 +18,8 @@ class _AddProductState extends State<AddProduct> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Container(padding: EdgeInsets.symmetric(vertical: 7),
+        Container(
+          padding: EdgeInsets.symmetric(vertical: 7),
           color: grey[100],
           height: 50,
           width: MediaQuery.of(context).size.width,
@@ -55,7 +56,7 @@ class _AddProductState extends State<AddProduct> {
             ],
           ),
         ),
-        selectedOption()
+        Expanded(child: selectedOption())
       ],
     );
   }

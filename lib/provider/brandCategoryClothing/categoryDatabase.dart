@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:mtumbaAdmin/models/users.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:uuid/uuid.dart';
 
 class CategoryService {
   Firestore firestore = Firestore.instance;
@@ -10,22 +9,19 @@ class CategoryService {
   newCategory(String categoryName) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var catId = prefs.getString(User.id);
-    var myEmail = prefs.getString(User.email);
-    firestore.collection(ref).document(catId).collection(myEmail).document().setData({
+    firestore.collection(ref).document(catId).setData({
       'categoryName': categoryName,
       'id': catId,
     });
   }
 
   checkExisting(String category) async {
+    return firestore.collection(ref).where('categoryName', isEqualTo: category).getDocuments();
+  }
+
+  Future<List<DocumentSnapshot>> getCategories() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var catId = prefs.getString(User.id);
-    var myEmail = prefs.getString(User.email);
-    return firestore
-        .collection(ref)
-        .document(catId)
-        .collection(myEmail)
-        .where('categoryName', isEqualTo: category)
-        .getDocuments();
+    return firestore.collection(ref).where('id', isEqualTo: catId).getDocuments().then((snaps) => snaps.documents);
   }
 }

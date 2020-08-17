@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mtumbaAdmin/models/users.dart';
-import 'package:mtumbaAdmin/provider/brandCategory/brandDatabase.dart';
+import 'package:mtumbaAdmin/provider/brandCategoryClothing/brandDatabase.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../styling.dart';
@@ -27,41 +27,39 @@ class _AddBrandState extends State<AddBrand> {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Container(
-        child: Column(
-          children: [
-            FloatingActionButton(
-              onPressed: () => categoryAlert(),
-              elevation: 0,
-              backgroundColor: orange[300],
-              child: Icon(
-                Icons.add,
-                size: 35,
-              ),
+    return Container(
+      child: Column(
+        children: [
+          FloatingActionButton(
+            onPressed: () => categoryAlert(),
+            elevation: 0,
+            backgroundColor: orange[300],
+            child: Icon(
+              Icons.add,
+              size: 35,
             ),
-            StreamBuilder(
-              stream: firestore.collection('brands').document(brandId).collection(email).snapshots(),
-              builder: (BuildContext context, AsyncSnapshot snapshot) {
-                if (snapshot.hasData) {
-                  return ListView.builder(
-                    shrinkWrap: true,
-                    addAutomaticKeepAlives: false,
-                    itemCount: snapshot.data.documents.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      DocumentSnapshot snap = snapshot.data.documents[index];
-                      print('Brand is${snap['brandName']}');
-                      return ListTile(
-                        title: Text(snap['brandName']),
-                      );
-                    },
-                  );
-                }
-                return Container();
-              },
-            ),
-          ],
-        ),
+          ),
+          StreamBuilder(
+            stream: firestore.collection('brands').where('id', isEqualTo: brandId).snapshots(),
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              if (snapshot.hasData) {
+                return ListView.builder(
+                  shrinkWrap: true,
+                  addAutomaticKeepAlives: false,
+                  itemCount: snapshot.data.documents.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    DocumentSnapshot snap = snapshot.data.documents[index];
+                    print('Brand is${snap['brandName']}');
+                    return ListTile(
+                      title: Text(snap['brandName']),
+                    );
+                  },
+                );
+              }
+              return Container();
+            },
+          ),
+        ],
       ),
     );
   }

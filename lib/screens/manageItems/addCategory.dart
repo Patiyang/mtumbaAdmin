@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mtumbaAdmin/models/users.dart';
-import 'package:mtumbaAdmin/provider/brandCategory/categoryDatabase.dart';
+import 'package:mtumbaAdmin/provider/brandCategoryClothing/categoryDatabase.dart';
 import 'package:mtumbaAdmin/styling.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -27,43 +27,41 @@ class _AddCategoryState extends State<AddCategory> {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Container(
-        // height: MediaQuery.of(context).size.height,
-        child: Column(
-        
-          children: [
-            FloatingActionButton(
-              onPressed: () => categoryAlert(),
-              elevation: 0,
-              backgroundColor: orange[300],
-              child: Icon(
-                Icons.add,
-                size: 35,
-              ),
+    return Container(
+      // height: MediaQuery.of(context).size.height,
+      child: Column(
+      
+        children: [
+          FloatingActionButton(
+            onPressed: () => categoryAlert(),
+            elevation: 0,
+            backgroundColor: orange[300],
+            child: Icon(
+              Icons.add,
+              size: 35,
             ),
-            StreamBuilder(
-              stream: firestore.collection('categories').document(categoryId).collection(email).snapshots(),
-              builder: (BuildContext context, AsyncSnapshot snapshot) {
-                if (snapshot.hasData) {
-                  return ListView.builder(
-                    shrinkWrap: true,
-                    addAutomaticKeepAlives: false,
-                    itemCount: snapshot.data.documents.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      DocumentSnapshot snap = snapshot.data.documents[index];
-                      print('Category is ${snap['categoryName']}');
-                      return ListTile(
-                        title: Text(snap['categoryName']),
-                      );
-                    },
-                  );
-                }
-                return Container();
-              },
-            ),
-          ],
-        ),
+          ),
+          StreamBuilder(
+            stream: firestore.collection('categories').where('id', isEqualTo: categoryId).snapshots(),
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              if (snapshot.hasData) {
+                return ListView.builder(
+                  shrinkWrap: true,
+                  addAutomaticKeepAlives: false,
+                  itemCount: snapshot.data.documents.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    DocumentSnapshot snap = snapshot.data.documents[index];
+                    print('Category is ${snap['categoryName']}');
+                    return ListTile(
+                      title: Text(snap['categoryName']),
+                    );
+                  },
+                );
+              }
+              return Container();
+            },
+          ),
+        ],
       ),
     );
   }
