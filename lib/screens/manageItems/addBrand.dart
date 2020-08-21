@@ -40,7 +40,7 @@ class _AddBrandState extends State<AddBrand> {
             ),
           ),
           StreamBuilder(
-            stream: firestore.collection('brands').where('id', isEqualTo: brandId).snapshots(),
+            stream: firestore.collection('brands').document(brandId).collection(email).snapshots(),
             builder: (BuildContext context, AsyncSnapshot snapshot) {
               if (snapshot.hasData) {
                 return ListView.builder(

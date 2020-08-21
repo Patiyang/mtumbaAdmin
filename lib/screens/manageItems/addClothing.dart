@@ -9,7 +9,9 @@ import 'package:mtumbaAdmin/provider/brandCategoryClothing/brandDatabase.dart';
 import 'package:mtumbaAdmin/provider/brandCategoryClothing/categoryDatabase.dart';
 import 'package:mtumbaAdmin/provider/brandCategoryClothing/clothingDatabase.dart';
 import 'package:mtumbaAdmin/styling.dart';
+import 'package:mtumbaAdmin/widgets/customText.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:toggle_switch/toggle_switch.dart';
 
 class AddClothing extends StatefulWidget {
   @override
@@ -23,6 +25,7 @@ class _AddClothingState extends State<AddClothing> {
   TextEditingController productPriceController = new TextEditingController();
   TextEditingController productCountController = new TextEditingController();
   TextEditingController productDescriptionController = new TextEditingController();
+  TextEditingController deliveryPriceController = new TextEditingController();
   List<DocumentSnapshot> categories = <DocumentSnapshot>[];
   List<DocumentSnapshot> brands = <DocumentSnapshot>[];
   List<DropdownMenuItem<String>> categoriesDropDown = <DropdownMenuItem<String>>[];
@@ -38,6 +41,7 @@ class _AddClothingState extends State<AddClothing> {
   String status;
   String _currentCategory = 'Empty';
   String _currentBrand = 'Empty';
+  bool deliveryPrice = true;
   int price = 1;
   File _image1;
   File _image2;
@@ -69,7 +73,7 @@ class _AddClothingState extends State<AddClothing> {
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: OutlineButton(
-                          borderSide: BorderSide(color: grey[400], width: 2.5),
+                          borderSide: BorderSide(color: grey[400], width: 1.5),
                           onPressed: () {
                             selectImage(ImagePicker.pickImage(source: ImageSource.gallery), 1);
                           },
@@ -81,7 +85,7 @@ class _AddClothingState extends State<AddClothing> {
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: OutlineButton(
-                        borderSide: BorderSide(color: grey[400], width: 2.5),
+                        borderSide: BorderSide(color: grey[400], width: 1.5),
                         onPressed: () {
                           selectImage(ImagePicker.pickImage(source: ImageSource.gallery), 2);
                         },
@@ -93,7 +97,7 @@ class _AddClothingState extends State<AddClothing> {
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: OutlineButton(
-                        borderSide: BorderSide(color: grey[400], width: 2.5),
+                        borderSide: BorderSide(color: grey[400], width: 1.5),
                         onPressed: () {
                           selectImage(ImagePicker.pickImage(source: ImageSource.gallery), 3);
                         },
@@ -114,7 +118,65 @@ class _AddClothingState extends State<AddClothing> {
               Divider(
                 color: grey,
               ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CustomText(
+                    text: 'Free Delivery?',
+                    size: 16,
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  ToggleSwitch(
+                    minHeight: 30,
+                    minWidth: 70.0,
+                    cornerRadius: 20.0,
+                    activeBgColor: deliveryPrice == true ? orange : grey,
+                    activeFgColor: Colors.white,
+                    inactiveBgColor: deliveryPrice == true ? grey : orange,
+                    inactiveFgColor: Colors.white,
+                    labels: ['YES', 'NO'],
+                    icons: [Icons.done, Icons.cancel],
+                    onToggle: (index) {
+                      if (index == 0) {
+                        setState(() {
+                          deliveryPrice = true;
+                        });
+                      }
+                      if (index == 1) {
+                        setState(() {
+                          deliveryPrice = false;
+                          deliveryPriceController.clear();
+                        });
+                      }
+                    },
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 10,
+              ),
 // ==========================ADDING THE BRAND AND CATEGORY========================================
+
+              Visibility(
+                visible: deliveryPrice == false,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                  child: TextFormField(
+                    keyboardType: TextInputType.numberWithOptions(),
+                    controller: deliveryPriceController,
+                    decoration:
+                        InputDecoration(border: InputBorder.none, hintText: 'delivery Price', hintStyle: TextStyle(color: grey)),
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return 'You must enter the delivery price';
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
@@ -169,8 +231,8 @@ class _AddClothingState extends State<AddClothing> {
                 padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
                 child: TextFormField(
                   controller: productNameController,
-                  decoration: InputDecoration(
-                      border: InputBorder.none, hintText: 'product name', hintStyle: TextStyle(color: grey)),
+                  decoration:
+                      InputDecoration(border: InputBorder.none, hintText: 'product name', hintStyle: TextStyle(color: grey)),
                   validator: (value) {
                     if (value.isEmpty) {
                       return 'you must enter product name';
@@ -186,8 +248,8 @@ class _AddClothingState extends State<AddClothing> {
                 child: TextFormField(
                   controller: productPriceController,
                   keyboardType: TextInputType.numberWithOptions(),
-                  decoration: InputDecoration(
-                      border: InputBorder.none, hintText: 'product Price', hintStyle: TextStyle(color: grey)),
+                  decoration:
+                      InputDecoration(border: InputBorder.none, hintText: 'product Price', hintStyle: TextStyle(color: grey)),
                   validator: (value) {
                     if (value.isEmpty) {
                       return 'you must enter product price';
@@ -201,8 +263,8 @@ class _AddClothingState extends State<AddClothing> {
                 child: TextFormField(
                   controller: productCountController,
                   keyboardType: TextInputType.numberWithOptions(),
-                  decoration: InputDecoration(
-                      border: InputBorder.none, hintText: 'Product Count', hintStyle: TextStyle(color: grey)),
+                  decoration:
+                      InputDecoration(border: InputBorder.none, hintText: 'Product Count', hintStyle: TextStyle(color: grey)),
                   validator: (value) {
                     if (value.isEmpty) {
                       return 'you must enter product count';
@@ -239,7 +301,8 @@ class _AddClothingState extends State<AddClothing> {
                     children: <Widget>[
                       Text('New'),
                       SizedBox(width: 10),
-                      Radio(activeColor: black,
+                      Radio(
+                        activeColor: black,
                         value: 'New',
                         groupValue: groupValue,
                         onChanged: (value) => changeStatus(value),
@@ -247,7 +310,8 @@ class _AddClothingState extends State<AddClothing> {
                       SizedBox(width: 40),
                       Text('Used'),
                       SizedBox(width: 10),
-                      Radio(activeColor: black,
+                      Radio(
+                        activeColor: black,
                         value: 'Used',
                         groupValue: groupValue,
                         onChanged: (value) => changeStatus(value),
@@ -264,7 +328,8 @@ class _AddClothingState extends State<AddClothing> {
                 padding: const EdgeInsets.all(8.0),
                 child: Text('Pick available sizes'),
               ),
-              FittedBox(fit: BoxFit.scaleDown,
+              FittedBox(
+                fit: BoxFit.scaleDown,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: <Widget>[
@@ -289,7 +354,6 @@ class _AddClothingState extends State<AddClothing> {
                   elevation: 0,
                   color: orange,
                   onPressed: () async {
-                    _formKey.currentState.reset();
                     await uploadProduct();
                   },
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
@@ -416,6 +480,14 @@ class _AddClothingState extends State<AddClothing> {
     if (formState.validate()) {
       if (_image1 != null && _image2 != null && _image3 != null) {
         if (selectedSize.isNotEmpty) {
+          if (deliveryPrice == true) {
+            setState(() {
+              deliveryPriceController.text = 'Free delivery';
+              print(deliveryPrice);
+            });
+          } else {
+            print(deliveryPrice);
+          }
           setState(() {
             loading = true;
           });
@@ -441,17 +513,20 @@ class _AddClothingState extends State<AddClothing> {
             imageUrl2 = await snap2.ref.getDownloadURL();
             imageUrl3 = await snap3.ref.getDownloadURL();
             List<String> images = [imageUrl1, imageUrl2, imageUrl3];
+
             productService.uploadProduct(
-                _currentCategory,
-                _currentBrand,
-                productNameController.text,
-                double.parse(productPriceController.text),
-                productDescriptionController.text,
-                int.parse(productCountController.text),
-                groupValue,
-                selectedSize,
-                images);
-            
+              _currentCategory,
+              _currentBrand,
+              productNameController.text,
+              double.parse(productPriceController.text),
+              productDescriptionController.text,
+              int.parse(productCountController.text),
+              groupValue,
+              selectedSize,
+              images,
+              deliveryPriceController.text,
+            );
+
             setState(() {
               loading = false;
             });

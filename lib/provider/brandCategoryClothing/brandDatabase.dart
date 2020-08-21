@@ -9,7 +9,9 @@ class BrandService {
   newBrand(String brandName) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var brandId = prefs.getString(User.id);
-    firestore.collection(ref).document(brandId).setData({
+    var myEmail = prefs.getString(User.email);
+
+    firestore.collection(ref).document(brandId).collection(myEmail).document().setData({
       'brandName': brandName,
       'id': brandId,
     });
@@ -18,11 +20,14 @@ class BrandService {
   Future<List<DocumentSnapshot>> getBrands() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var brandId = prefs.getString(User.id);
-    // var myEmail = prefs.getString(User.email);
-    return firestore.collection(ref).where('id', isEqualTo: brandId).getDocuments().then((snaps) => snaps.documents);
+    var myEmail = prefs.getString(User.email);
+    return firestore.collection(ref).document(brandId).collection(myEmail).getDocuments().then((snaps) => snaps.documents);
   }
 
-  checkExisting(String brand) {
-    return firestore.collection(ref).where('brandName', isEqualTo: brand).getDocuments();
+  checkExisting(String brand) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var brandId = prefs.getString(User.id);
+    var myEmail = prefs.getString(User.email);
+    return firestore.collection(ref).document(brandId).collection(myEmail).where('brandName', isEqualTo: brand).getDocuments();
   }
 }

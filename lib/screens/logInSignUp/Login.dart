@@ -32,14 +32,14 @@ class _LoginState extends State<Login> {
   QuerySnapshot snapshot;
   @override
   void initState() {
-    super.initState();
     getUserName();
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: email.isEmpty
+        body: email.length < 1
             ? Stack(
                 children: <Widget>[
                   Container(

@@ -26,11 +26,11 @@ class _HomeNavigationState extends State<HomeNavigation> {
             elevation: 0,
             iconSize: 15,
             currentIndex: currentIndex,
-            backgroundColor: grey[100],
+            backgroundColor: grey[200],
             items: [
-              BottomNavigationBarItem(icon: Icon(Icons.home), title: Text('Home'), backgroundColor: grey[100]),
-              BottomNavigationBarItem(icon: Icon(Icons.call_to_action), title: Text('AddProduct'), backgroundColor: grey[100]),
-              BottomNavigationBarItem(icon: Icon(Icons.person), title: Text('Profile'), backgroundColor: grey[100]),
+              BottomNavigationBarItem(icon: Icon(Icons.home), title: Text('Home')),
+              BottomNavigationBarItem(icon: Icon(Icons.call_to_action), title: Text('AddProduct')),
+              BottomNavigationBarItem(icon: Icon(Icons.person), title: Text('Profile')),
             ],
             onTap: (index) {
               setState(() {

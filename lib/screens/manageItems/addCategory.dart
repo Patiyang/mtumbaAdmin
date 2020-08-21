@@ -42,7 +42,7 @@ class _AddCategoryState extends State<AddCategory> {
             ),
           ),
           StreamBuilder(
-            stream: firestore.collection('categories').where('id', isEqualTo: categoryId).snapshots(),
+            stream: firestore.collection('categories').document(categoryId).collection(email).snapshots(),
             builder: (BuildContext context, AsyncSnapshot snapshot) {
               if (snapshot.hasData) {
                 return ListView.builder(
