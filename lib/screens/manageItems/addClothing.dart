@@ -26,6 +26,7 @@ class _AddClothingState extends State<AddClothing> {
   TextEditingController productCountController = new TextEditingController();
   TextEditingController productDescriptionController = new TextEditingController();
   TextEditingController deliveryPriceController = new TextEditingController();
+  TextEditingController locationController = new TextEditingController();
   List<DocumentSnapshot> categories = <DocumentSnapshot>[];
   List<DocumentSnapshot> brands = <DocumentSnapshot>[];
   List<DropdownMenuItem<String>> categoriesDropDown = <DropdownMenuItem<String>>[];
@@ -158,7 +159,6 @@ class _AddClothingState extends State<AddClothing> {
                 height: 10,
               ),
 // ==========================ADDING THE BRAND AND CATEGORY========================================
-
               Visibility(
                 visible: deliveryPrice == false,
                 child: Padding(
