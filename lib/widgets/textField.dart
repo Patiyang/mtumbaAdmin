@@ -12,21 +12,25 @@ class CustomTextField extends StatelessWidget {
   final bool obscure;
   final TextInputType textInputType;
   final TextAlign textAlign;
+  final bool readOnly;
+  final String initialValue;
 //validator components
   final validator;
-  const CustomTextField(
-      {Key key,
-      this.hint,
-      this.iconOne,
-      this.iconTwo,
-      this.containerColor,
-      this.hintColor,
-      this.controller,
-      this.validator,
-      this.obscure,
-      this.textInputType,
-      this.textAlign})
-      : super(key: key);
+  const CustomTextField({
+    Key key,
+    this.hint,
+    this.iconOne,
+    this.iconTwo,
+    this.containerColor,
+    this.hintColor,
+    this.controller,
+    this.validator,
+    this.obscure,
+    this.textInputType,
+    this.textAlign,
+    this.readOnly,
+    this.initialValue,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -38,6 +42,8 @@ class CustomTextField extends StatelessWidget {
         margin: EdgeInsets.symmetric(horizontal: 11),
         width: MediaQuery.of(context).size.width,
         child: TextFormField(
+          initialValue: initialValue,
+          readOnly: readOnly ?? false,
           textAlign: textAlign ?? TextAlign.center,
           keyboardType: textInputType,
           obscureText: obscure ?? false,

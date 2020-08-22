@@ -29,6 +29,8 @@ class _LoginState extends State<Login> {
   String email = '';
   String password = '';
   String id;
+  String names = '';
+  String profilePicture = '';
   QuerySnapshot snapshot;
   @override
   void initState() {
@@ -39,7 +41,7 @@ class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: email.length < 1
+        body: email == null
             ? Stack(
                 children: <Widget>[
                   Container(
@@ -208,14 +210,20 @@ class _LoginState extends State<Login> {
           password = snap.documents[0].data[User.password];
           email = snap.documents[0].data[User.email];
           id = snap.documents[0].data[User.id];
+          names = '${snap.documents[0].data[User.firstName]} ' + '${snap.documents[0].data[User.lastName]}';
+          profilePicture = '${snap.documents[0].data[User.profilePicture]}';
+
           if (email == emailController.text && password == passwordController.text) {
             prefs.setString(User.email, email);
             prefs.setString(User.id, id);
+            prefs.setString('names', names);
+            prefs.setString(User.profilePicture, profilePicture);
             await userProvider
                 .signIn(emailController.text, passwordController.text)
-                .then((value) => () {
+                .then((value) => () async {
                       email = value == true ? prefs.getString(User.email) : '';
                     })
+                .then((value) => userDataBase.updateProfile('', ''))
                 .then((value) => Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => HomeNavigation())));
           }
         }

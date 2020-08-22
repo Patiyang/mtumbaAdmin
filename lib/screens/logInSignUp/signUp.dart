@@ -209,7 +209,7 @@ class _RegisterState extends State<Register> {
 
   signUp() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString(User.email, emailController.text);
+
     if (imageToUpload == null) {
       scaffoldKey.currentState.showSnackBar(SnackBar(
           content: Text(
@@ -223,17 +223,19 @@ class _RegisterState extends State<Register> {
         loading = true;
       });
       String profilePicture;
-      userDataBase.getUserByEmail(emailController.text).then((QuerySnapshot snap) async {
+      userDataBase.getUserByEmail(emailController.text).then((snap) async {
         if (snap.documents.length < 1) {
           String imageName = '${emailController.text}${DateTime.now().millisecondsSinceEpoch}.jpg';
-          StorageTaskSnapshot snap = await storage.child('images/$imageName').putFile(imageToUpload).onComplete;
+          StorageTaskSnapshot snap = await storage.child('profileImages/$imageName').putFile(imageToUpload).onComplete;
           if (snap.error == null) {
             profilePicture = await snap.ref.getDownloadURL();
             await userDataBase.createUser(
                 firstNameController.text, lastNameController.text, emailController.text, passwordController.text, profilePicture);
-            await userProvider
-                .signUp(emailController.text, passwordController.text)
-                .then((value) => Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => HomeNavigation())));
+            await userProvider.signUp(emailController.text, passwordController.text).then((value) {
+              prefs.setString(User.email, emailController.text);
+              prefs.setString('names', '${firstNameController.text}' + '${lastNameController.text}');
+              prefs.setString(User.profilePicture, profilePicture);
+            }).then((value) => Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => HomeNavigation())));
           }
         } else {
           setState(() {

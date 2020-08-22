@@ -498,15 +498,15 @@ class _AddClothingState extends State<AddClothing> {
           final FirebaseStorage storage = FirebaseStorage.instance;
 // ===========================ADDING THE 3 IMAGES IN A LIST================================
           final String picture1 = '1${DateTime.now().millisecondsSinceEpoch.toString()}.jpg';
-          StorageUploadTask task1 = storage.ref().child(picture1).putFile(_image1);
+          StorageUploadTask task1 = storage.ref().child('backgroundImages/$picture1').putFile(_image1);
           StorageTaskSnapshot snap1 = await task1.onComplete.then((snap) => snap);
 
           final String picture2 = '2${DateTime.now().millisecondsSinceEpoch.toString()}.jpg';
-          StorageUploadTask task2 = storage.ref().child(picture2).putFile(_image2);
+          StorageUploadTask task2 = storage.ref().child('backgroundImages/$picture2').putFile(_image2);
           StorageTaskSnapshot snap2 = await task2.onComplete.then((snap2) => snap2);
 
           final String picture3 = '3${DateTime.now().millisecondsSinceEpoch.toString()}.jpg';
-          StorageUploadTask task3 = storage.ref().child(picture3).putFile(_image3);
+          StorageUploadTask task3 = storage.ref().child('backgroundImages/$picture3').putFile(_image3);
 
           task3.onComplete.then((snap3) async {
             imageUrl1 = await snap1.ref.getDownloadURL();

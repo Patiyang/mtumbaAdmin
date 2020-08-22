@@ -8,7 +8,7 @@ class ProductService {
   String ref = 'product';
 
   void uploadProduct(String category, String brand, String productName, double productPrice, String productDescription,
-      int productCount, String status, List<String> size, List<String> images, String delivery, String location) async {
+      int productCount, String status, List<String> size, List<String> images, String delivery) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     // var brandId = prefs.getString(User.id);
     String brandId;
@@ -26,7 +26,7 @@ class ProductService {
       'size': size,
       'images': images,
       'delivery': delivery,
-      'location':location
+      // 'location':location
     });
   }
 }

@@ -6,6 +6,7 @@ import 'package:uuid/uuid.dart';
 class UserDataBase {
   Firestore _firestore = Firestore.instance;
   String users = 'users';
+  String profile = 'adminProfile';
 
   createUser(String firstName, String lastName, String emailAddress, String password, String profilePicture) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -19,7 +20,23 @@ class UserDataBase {
         User.password: password,
         User.email: emailAddress,
         User.id: userId,
-        User.profilePicture: profilePicture
+        User.profilePicture: profilePicture,
+      });
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  updateProfile(String backgroundImage, String phoneNumber) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String profileId = prefs.getString(User.id);
+    String email = prefs.getString(User.email);
+    try {
+      return _firestore.collection(profile).document(profileId).collection(email).document(profileId).setData({
+        User.email: email,
+        User.id: profileId,
+        User.backgroundImage: backgroundImage,
+        User.phoneNumber: phoneNumber,
       });
     } catch (e) {
       print(e.toString());
@@ -37,4 +54,6 @@ class UserDataBase {
   getUserByEmail(String email) {
     return _firestore.collection(users).where(User.email, isEqualTo: email).getDocuments();
   }
+
+  
 }
