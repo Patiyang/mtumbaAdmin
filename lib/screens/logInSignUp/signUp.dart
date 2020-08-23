@@ -140,6 +140,21 @@ class _RegisterState extends State<Register> {
                                 SizedBox(height: 8),
                                 Container(
                                   padding: const EdgeInsets.symmetric(vertical: 1.0, horizontal: 25),
+                                  child: CustomTextField(textInputType: TextInputType.numberWithOptions(),
+                                    validator: (v) {
+                                      if (v.isEmpty) {
+                                        return 'laseName field cannot be left empty';
+                                      }
+                                      return null;
+                                    },
+                                    // containerColor: white.withOpacity(.8),
+                                    hint: 'PhoneNumber',
+                                    controller: phoneNumberController,
+                                  ),
+                                ),
+                                SizedBox(height: 8),
+                                Container(
+                                  padding: const EdgeInsets.symmetric(vertical: 1.0, horizontal: 25),
                                   child: CustomTextField(
                                     validator: (v) {
                                       if (v.isEmpty) {
@@ -229,12 +244,10 @@ class _RegisterState extends State<Register> {
           StorageTaskSnapshot snap = await storage.child('profileImages/$imageName').putFile(imageToUpload).onComplete;
           if (snap.error == null) {
             profilePicture = await snap.ref.getDownloadURL();
-            await userDataBase.createUser(
-                firstNameController.text, lastNameController.text, emailController.text, passwordController.text, profilePicture);
+            await userDataBase.createUser(firstNameController.text, lastNameController.text, emailController.text,
+                passwordController.text, profilePicture, phoneNumberController.text);
             await userProvider.signUp(emailController.text, passwordController.text).then((value) {
               prefs.setString(User.email, emailController.text);
-              prefs.setString('names', '${firstNameController.text}' + '${lastNameController.text}');
-              prefs.setString(User.profilePicture, profilePicture);
             }).then((value) => Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => HomeNavigation())));
           }
         } else {

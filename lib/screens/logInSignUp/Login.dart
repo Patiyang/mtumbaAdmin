@@ -34,6 +34,7 @@ class _LoginState extends State<Login> {
   QuerySnapshot snapshot;
   @override
   void initState() {
+    // email = '';
     getUserName();
     super.initState();
   }
@@ -192,10 +193,16 @@ class _LoginState extends State<Login> {
 
   getUserName() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      email = prefs.getString(User.email);
-    });
-    print('The email address is ' + email);
+    if (email == null) {
+      setState(() {
+        email = '';
+        print('the email length is ${email.length}');
+      });
+    } else {
+      setState(() {
+        email = prefs.getString(User.email);
+      });
+    }
   }
 
   signIn() async {

@@ -52,12 +52,16 @@ class _ProfileState extends State<Profile> {
         Form(
           key: formKey,
           child: StreamBuilder(
-            stream: profileInfo,
+            stream: _firestore.collection('users').snapshots(),
             builder: (BuildContext context, AsyncSnapshot snapshot) {
               if (snapshot.hasData) {
                 DocumentSnapshot snap = snapshot.data.documents[0];
                 // backGround = snap[User.backgroundImage];
-                print('the name is ${snap[User.email]}');
+                profileImage = snap[User.profilePicture];
+                email = snap[User.email];
+                names = '${snap[User.firstName]} ' + '${snap[User.lastName]}';
+                // phoneController.text = '${snap[User.phoneNumber]}';
+                // print(backGround);
                 return ListView(
                   shrinkWrap: true,
                   children: [
@@ -65,13 +69,16 @@ class _ProfileState extends State<Profile> {
                       children: [
                         GestureDetector(
                           onTap: () {
+                            // backGround = snap[User.backgroundImage];
                             print('object');
-                            backGround = '';
-                            print(backGround.length);
+                            setState(() {
+                              backGround = null;
+                            });
                             selectImage(ImagePicker.pickImage(source: ImageSource.gallery));
                           },
-                          child: backGround.length > 0
-                              ? ClipRRect(
+                          child: backGround == null ||snap[User.backgroundImage]==null
+                              ? displayChild1()
+                              : ClipRRect(
                                   borderRadius:
                                       BorderRadius.only(bottomLeft: Radius.circular(20), bottomRight: Radius.circular(20)),
                                   child: Container(
@@ -83,8 +90,7 @@ class _ProfileState extends State<Profile> {
                                       width: double.infinity,
                                     ),
                                   ),
-                                )
-                              : displayChild1(),
+                                ),
                         ),
                         Container(
                           padding: EdgeInsets.only(top: 190),
@@ -120,6 +126,7 @@ class _ProfileState extends State<Profile> {
                     Container(
                       padding: const EdgeInsets.symmetric(vertical: 1.0, horizontal: 25),
                       child: CustomTextField(
+                        textInputType: TextInputType.numberWithOptions(),
                         validator: (v) {
                           if (v.isEmpty) {
                             return 'Phone Number cannot be empty';
@@ -128,8 +135,9 @@ class _ProfileState extends State<Profile> {
                         },
                         // containerColor: white.withOpacity(.8),
                         iconOne: Icons.person,
-                        hint: 'PhoneNumber',
+                        hint: 'Phone Number',
                         controller: phoneController,
+                        hintColor: grey,
                       ),
                     ),
                     Container(
@@ -169,24 +177,26 @@ class _ProfileState extends State<Profile> {
   }
 
   updateInfo() async {
-    if (backGroundImage == null) {
+    if (backGroundImage == null && backGround == null) {
       Fluttertoast.showToast(msg: 'Failed!! Please choose a background Image');
     }
-    if (formKey.currentState.validate() && backGroundImage != null) {
+    if (formKey.currentState.validate()) {
       setState(() {
         loading = true;
       });
+
       String backImage;
       String imageName = '$email' + '${DateTime.now().millisecondsSinceEpoch}.jpg';
       StorageTaskSnapshot snap = await storage.child('backgroundImages/$imageName').putFile(backGroundImage).onComplete;
       if (snap.error == null) {
-        SharedPreferences preferences = await SharedPreferences.getInstance();
         backImage = await snap.ref.getDownloadURL();
         backGround = backImage;
-        print(backGround);
-        preferences.setString(User.backgroundImage, backGround);
-        backGround = preferences.getString(User.backgroundImage);
         dataBase.updateProfile(backImage, phoneController.text);
+      } else {
+        setState(() {
+          loading = false;
+          print('error encountered');
+        });
       }
       setState(() {
         loading = false;
@@ -197,7 +207,7 @@ class _ProfileState extends State<Profile> {
   logout() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
-      prefs.setString(User.email, '');
+      prefs.setString(User.email, null);
     });
     await userProvider.signOut().then((value) => Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => Login())));
   }
@@ -205,13 +215,10 @@ class _ProfileState extends State<Profile> {
   getUserInfo() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
-      email = prefs.getString(User.email);
-      names = prefs.getString('names');
       id = prefs.getString(User.id);
-      profileImage = prefs.getString(User.profilePicture);
-      backGround = prefs.getString(User.backgroundImage);
-      
-      profileInfo = _firestore.collection('adminProfile').document(id).collection(email).getDocuments().asStream();
+      if (backGround == null) {
+        backGround = '';
+      }
     });
   }
 
