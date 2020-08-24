@@ -53,5 +53,5 @@ class UserDataBase {
     return _firestore.collection(users).where(User.email, isEqualTo: email).getDocuments();
   }
 
-  
+ 
 }

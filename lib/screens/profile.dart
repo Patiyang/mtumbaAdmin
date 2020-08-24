@@ -39,6 +39,8 @@ class _ProfileState extends State<Profile> {
   String phoneNumber = '';
   bool loading = false;
   File backGroundImage;
+  QuerySnapshot snapshot;
+
   @override
   void initState() {
     getUserInfo();
@@ -56,12 +58,10 @@ class _ProfileState extends State<Profile> {
             builder: (BuildContext context, AsyncSnapshot snapshot) {
               if (snapshot.hasData) {
                 DocumentSnapshot snap = snapshot.data.documents[0];
-                // backGround = snap[User.backgroundImage];
                 profileImage = snap[User.profilePicture];
                 email = snap[User.email];
                 names = '${snap[User.firstName]} ' + '${snap[User.lastName]}';
-                // phoneController.text = '${snap[User.phoneNumber]}';
-                // print(backGround);
+                phoneController.text = '${snap[User.phoneNumber]}';
                 return ListView(
                   shrinkWrap: true,
                   children: [
@@ -69,14 +69,13 @@ class _ProfileState extends State<Profile> {
                       children: [
                         GestureDetector(
                           onTap: () {
-                            // backGround = snap[User.backgroundImage];
                             print('object');
+                            selectImage(ImagePicker.pickImage(source: ImageSource.gallery));
                             setState(() {
                               backGround = null;
                             });
-                            selectImage(ImagePicker.pickImage(source: ImageSource.gallery));
                           },
-                          child: backGround == null ||snap[User.backgroundImage]==null
+                          child: backGround == null || snap[User.backgroundImage] == null
                               ? displayChild1()
                               : ClipRRect(
                                   borderRadius:
@@ -84,11 +83,15 @@ class _ProfileState extends State<Profile> {
                                   child: Container(
                                     height: 250,
                                     color: orange[300],
-                                    child: Image.network(
-                                      snap[User.backgroundImage],
-                                      fit: BoxFit.cover,
-                                      width: double.infinity,
-                                    ),
+                                    child: snapshot.connectionState == ConnectionState.waiting
+                                        ? Loading(
+                                            indicatorColor: AlwaysStoppedAnimation<Color>(black),
+                                          )
+                                        : Image.network(
+                                            snap[User.backgroundImage],
+                                            fit: BoxFit.cover,
+                                            width: double.infinity,
+                                          ),
                                   ),
                                 ),
                         ),
@@ -164,9 +167,9 @@ class _ProfileState extends State<Profile> {
                   ],
                 );
               }
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(child: CircularProgressIndicator());
-              }
+              // if (snapshot.connectionState == ConnectionState.waiting) {
+              //   return Center(child: CircularProgressIndicator());
+              // }
               return Container();
             },
           ),
@@ -177,8 +180,9 @@ class _ProfileState extends State<Profile> {
   }
 
   updateInfo() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     if (backGroundImage == null && backGround == null) {
-      Fluttertoast.showToast(msg: 'Failed!! Please choose a background Image');
+      Fluttertoast.showToast(msg: 'Failed!! Please choose a background Image', backgroundColor: black);
     }
     if (formKey.currentState.validate()) {
       setState(() {
@@ -187,17 +191,25 @@ class _ProfileState extends State<Profile> {
 
       String backImage;
       String imageName = '$email' + '${DateTime.now().millisecondsSinceEpoch}.jpg';
-      StorageTaskSnapshot snap = await storage.child('backgroundImages/$imageName').putFile(backGroundImage).onComplete;
-      if (snap.error == null) {
-        backImage = await snap.ref.getDownloadURL();
-        backGround = backImage;
-        dataBase.updateProfile(backImage, phoneController.text);
+      if (backGround == null) {
+        StorageTaskSnapshot snap = await storage.child('backgroundImages/$imageName').putFile(backGroundImage).onComplete;
+        if (snap.error == null) {
+          backImage = await snap.ref.getDownloadURL();
+          backGround = backImage;
+          dataBase.updateProfile(backImage, phoneController.text);
+          print('Mother Fucker');
+        }
       } else {
-        setState(() {
-          loading = false;
-          print('error encountered');
+        ///this section is for when the user just wants to update the phone Number
+        ///the same logic can also be applied to updating the profile picture
+        email = prefs.getString(User.email);
+        dataBase.getUserByEmail(email).then((snap) {
+          snapshot = snap;
+          backGround = snap.documents[0].data[User.backgroundImage];
+          dataBase.updateProfile(backGround, phoneController.text);
         });
       }
+
       setState(() {
         loading = false;
       });
