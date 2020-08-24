@@ -40,28 +40,24 @@ class CustomTextField extends StatelessWidget {
       decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(10)), boxShadow: [
         BoxShadow(blurRadius: 0, color: containerColor ?? grey[200], offset: Offset(0, 0), spreadRadius: 0),
       ]),
-      child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 11),
-        width: MediaQuery.of(context).size.width,
-        child: TextFormField(
-          maxLines: maxLines ?? 1,
-          initialValue: initialValue,
-          readOnly: readOnly ?? false,
-          textAlign: textAlign ?? TextAlign.center,
-          keyboardType: keyBoardType,
-          obscureText: obscure ?? false,
-          validator: validator,
-          controller: controller,
-          style: TextStyle(color: black),
-          cursorColor: black,
-          decoration: InputDecoration(
-              icon: Icon(iconOne),
-              border: InputBorder.none,
-              hintText: hint,
-              hintStyle: TextStyle(
-                color: hintColor ?? grey,
-              )),
-        ),
+      child: TextFormField(
+        maxLines: maxLines ?? 1,
+        initialValue: initialValue,
+        readOnly: readOnly ?? false,
+        textAlign: textAlign ?? TextAlign.center,
+        keyboardType: keyBoardType,
+        obscureText: obscure ?? false,
+        validator: validator,
+        controller: controller,
+        style: TextStyle(color: black),
+        cursorColor: black,
+        decoration: InputDecoration(
+            // icon: Icon(iconOne),
+            border: InputBorder.none,
+            hintText: hint,
+            hintStyle: TextStyle(
+              color: hintColor ?? grey,
+            )),
       ),
     );
   }

@@ -63,7 +63,7 @@ class _ProfileState extends State<Profile> {
                 // profileImage = snap[User.profilePicture];
                 email = snap[User.email];
                 names = '${snap[User.firstName]} ' + '${snap[User.lastName]}';
-                
+
                 return ListView(
                   shrinkWrap: true,
                   children: [
@@ -123,7 +123,7 @@ class _ProfileState extends State<Profile> {
                       padding: const EdgeInsets.symmetric(vertical: 1.0, horizontal: 25),
                       child: CustomTextField(
                         readOnly: true,
-                        iconOne: Icons.email,
+                        iconOne: Icons.person,
                         hint: email,
                         hintColor: black,
                       ),
@@ -140,9 +140,9 @@ class _ProfileState extends State<Profile> {
                         },
                         // containerColor: white.withOpacity(.8),
                         iconOne: Icons.phone,
-                        hint: '${snap[User.phoneNumber]}',
+                        hint: 'Phone Number',
                         controller: phoneController,
-                        hintColor: grey[700],
+                        hintColor: grey,
                       ),
                     ),
                     Container(
@@ -156,9 +156,9 @@ class _ProfileState extends State<Profile> {
                         },
                         // containerColor: white.withOpacity(.8),
                         iconOne: Icons.location_on,
-                        hint: '${snap[User.location]}',
+                        hint: 'Location',
                         controller: locationController,
-                        hintColor: grey[700],
+                        hintColor: grey,
                       ),
                     ),
                     Container(
@@ -171,10 +171,10 @@ class _ProfileState extends State<Profile> {
                           return null;
                         },
                         // containerColor: white.withOpacity(.8),
-                        iconOne: Icons.store,
-                        hint: '${snap[User.shopName]}',
+                        iconOne: Icons.person,
+                        hint: 'Shop Name',
                         controller: shopNameController,
-                        hintColor: grey[700],
+                        hintColor: grey,
                       ),
                     ),
                     Container(
@@ -191,9 +191,9 @@ class _ProfileState extends State<Profile> {
                         },
                         // containerColor: white.withOpacity(.8),
                         iconOne: Icons.person,
-                        hint: '${snap[User.description]}',
+                        hint: 'Description',
                         controller: descriptionController,
-                        hintColor: grey[700],
+                        hintColor: grey,
                       ),
                     ),
                     Container(
@@ -287,6 +287,15 @@ class _ProfileState extends State<Profile> {
       if (backGround == null) {
         backGround = '';
       }
+    });
+    email = prefs.getString(User.email);
+
+    dataBase.getUserByEmail(email).then((snap) {
+      snapshot = snap;
+      phoneController.text = '${snap.documents[0].data[User.phoneNumber]}';
+      descriptionController.text = '${snap.documents[0].data[User.description]}' ?? '';
+      shopNameController.text = '${snap.documents[0].data[User.shopName]}' ?? '';
+      locationController.text = '${snap.documents[0].data[User.location]}' ?? '';
     });
   }
 
