@@ -27,6 +27,7 @@ class _RegisterState extends State<Register> {
   final TextEditingController userNameController = new TextEditingController();
   final TextEditingController emailController = new TextEditingController();
   final TextEditingController phoneNumberController = new TextEditingController();
+  final TextEditingController shopNameController = new TextEditingController();
   final TextEditingController passwordController = new TextEditingController();
   final formKey = GlobalKey<FormState>();
   final scaffoldKey = GlobalKey<ScaffoldState>();
@@ -106,7 +107,7 @@ class _RegisterState extends State<Register> {
                                   child: CustomTextField(
                                     validator: (v) {
                                       if (v.isEmpty) {
-                                        return 'laseName field cannot be left empty';
+                                        return 'lastName field cannot be left empty';
                                       }
                                       return null;
                                     },
@@ -140,7 +141,24 @@ class _RegisterState extends State<Register> {
                                 SizedBox(height: 8),
                                 Container(
                                   padding: const EdgeInsets.symmetric(vertical: 1.0, horizontal: 25),
-                                  child: CustomTextField(textInputType: TextInputType.numberWithOptions(),
+                                  child: CustomTextField(
+                                    // keyBoardType: TextInputType.numberWithOptions(),
+                                    validator: (v) {
+                                      if (v.isEmpty) {
+                                        return 'shopName cannot be left empty';
+                                      }
+                                      return null;
+                                    },
+                                    // containerColor: white.withOpacity(.8),
+                                    hint: 'shopName',
+                                    controller: shopNameController,
+                                  ),
+                                ),
+                                SizedBox(height: 8),
+                                Container(
+                                  padding: const EdgeInsets.symmetric(vertical: 1.0, horizontal: 25),
+                                  child: CustomTextField(
+                                    keyBoardType: TextInputType.numberWithOptions(),
                                     validator: (v) {
                                       if (v.isEmpty) {
                                         return 'laseName field cannot be left empty';
@@ -245,10 +263,14 @@ class _RegisterState extends State<Register> {
           if (snap.error == null) {
             profilePicture = await snap.ref.getDownloadURL();
             await userDataBase.createUser(firstNameController.text, lastNameController.text, emailController.text,
-                passwordController.text, profilePicture, phoneNumberController.text);
-            await userProvider.signUp(emailController.text, passwordController.text).then((value) {
-              prefs.setString(User.email, emailController.text);
-            }).then((value) => Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => HomeNavigation())));
+                passwordController.text, profilePicture, phoneNumberController.text, shopNameController.text);
+            await userProvider
+                .signUp(emailController.text, passwordController.text)
+                .then((value) {
+                  prefs.setString(User.email, emailController.text);
+                })
+                .then((value) => userDataBase.updateProfile('', phoneNumberController.text, '', shopNameController.text, ''))
+                .then((value) => Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => HomeNavigation())));
           }
         } else {
           setState(() {

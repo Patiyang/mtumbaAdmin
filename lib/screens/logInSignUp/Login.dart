@@ -230,7 +230,6 @@ class _LoginState extends State<Login> {
                 .then((value) => () async {
                       email = value == true ? prefs.getString(User.email) : '';
                     })
-                .then((value) => userDataBase.updateProfile('', ''))
                 .then((value) => Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => HomeNavigation())));
           }
         }

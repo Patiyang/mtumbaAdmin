@@ -27,6 +27,8 @@ class _ProfileState extends State<Profile> {
   final formKey = GlobalKey<FormState>();
   final TextEditingController phoneController = new TextEditingController();
   final TextEditingController locationController = new TextEditingController();
+  final TextEditingController descriptionController = new TextEditingController();
+  final TextEditingController shopNameController = new TextEditingController();
   UserDataBase dataBase = new UserDataBase();
   StorageReference storage = FirebaseStorage.instance.ref();
 
@@ -58,10 +60,10 @@ class _ProfileState extends State<Profile> {
             builder: (BuildContext context, AsyncSnapshot snapshot) {
               if (snapshot.hasData) {
                 DocumentSnapshot snap = snapshot.data.documents[0];
-                profileImage = snap[User.profilePicture];
+                // profileImage = snap[User.profilePicture];
                 email = snap[User.email];
                 names = '${snap[User.firstName]} ' + '${snap[User.lastName]}';
-                phoneController.text = '${snap[User.phoneNumber]}';
+                
                 return ListView(
                   shrinkWrap: true,
                   children: [
@@ -75,7 +77,7 @@ class _ProfileState extends State<Profile> {
                               backGround = null;
                             });
                           },
-                          child: backGround == null || snap[User.backgroundImage] == null
+                          child: backGround == null || snap[User.backgroundImage] == ''
                               ? displayChild1()
                               : ClipRRect(
                                   borderRadius:
@@ -100,7 +102,7 @@ class _ProfileState extends State<Profile> {
                           alignment: Alignment.topCenter,
                           child: CircleAvatar(
                             radius: 60,
-                            backgroundImage: NetworkImage(profileImage),
+                            backgroundImage: NetworkImage('${snap[User.profilePicture]}'),
                           ),
                         ),
                       ],
@@ -121,7 +123,7 @@ class _ProfileState extends State<Profile> {
                       padding: const EdgeInsets.symmetric(vertical: 1.0, horizontal: 25),
                       child: CustomTextField(
                         readOnly: true,
-                        iconOne: Icons.person,
+                        iconOne: Icons.email,
                         hint: email,
                         hintColor: black,
                       ),
@@ -129,7 +131,7 @@ class _ProfileState extends State<Profile> {
                     Container(
                       padding: const EdgeInsets.symmetric(vertical: 1.0, horizontal: 25),
                       child: CustomTextField(
-                        textInputType: TextInputType.numberWithOptions(),
+                        keyBoardType: TextInputType.numberWithOptions(),
                         validator: (v) {
                           if (v.isEmpty) {
                             return 'Phone Number cannot be empty';
@@ -137,10 +139,61 @@ class _ProfileState extends State<Profile> {
                           return null;
                         },
                         // containerColor: white.withOpacity(.8),
-                        iconOne: Icons.person,
-                        hint: 'Phone Number',
+                        iconOne: Icons.phone,
+                        hint: '${snap[User.phoneNumber]}',
                         controller: phoneController,
-                        hintColor: grey,
+                        hintColor: grey[700],
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(vertical: 1.0, horizontal: 25),
+                      child: CustomTextField(
+                        validator: (v) {
+                          if (v.isEmpty) {
+                            return 'LOcation cannot be empty';
+                          }
+                          return null;
+                        },
+                        // containerColor: white.withOpacity(.8),
+                        iconOne: Icons.location_on,
+                        hint: '${snap[User.location]}',
+                        controller: locationController,
+                        hintColor: grey[700],
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(vertical: 1.0, horizontal: 25),
+                      child: CustomTextField(
+                        validator: (v) {
+                          if (v.isEmpty) {
+                            return 'ShopName cannot be empty';
+                          }
+                          return null;
+                        },
+                        // containerColor: white.withOpacity(.8),
+                        iconOne: Icons.store,
+                        hint: '${snap[User.shopName]}',
+                        controller: shopNameController,
+                        hintColor: grey[700],
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(vertical: 1.0, horizontal: 25),
+                      child: CustomTextField(
+                        textAlign: TextAlign.center,
+                        maxLines: 5,
+                        keyBoardType: TextInputType.multiline,
+                        validator: (v) {
+                          if (v.isEmpty) {
+                            return 'Description cannot be empty';
+                          }
+                          return null;
+                        },
+                        // containerColor: white.withOpacity(.8),
+                        iconOne: Icons.person,
+                        hint: '${snap[User.description]}',
+                        controller: descriptionController,
+                        hintColor: grey[700],
                       ),
                     ),
                     Container(
@@ -167,9 +220,9 @@ class _ProfileState extends State<Profile> {
                   ],
                 );
               }
-              // if (snapshot.connectionState == ConnectionState.waiting) {
-              //   return Center(child: CircularProgressIndicator());
-              // }
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Center(child: CircularProgressIndicator());
+              }
               return Container();
             },
           ),
@@ -196,8 +249,9 @@ class _ProfileState extends State<Profile> {
         if (snap.error == null) {
           backImage = await snap.ref.getDownloadURL();
           backGround = backImage;
-          dataBase.updateProfile(backImage, phoneController.text);
-          print('Mother Fucker');
+          dataBase.updateProfile(
+              backImage, phoneController.text, locationController.text, shopNameController.text, descriptionController.text);
+          print('profile updated with image');
         }
       } else {
         ///this section is for when the user just wants to update the phone Number
@@ -206,7 +260,9 @@ class _ProfileState extends State<Profile> {
         dataBase.getUserByEmail(email).then((snap) {
           snapshot = snap;
           backGround = snap.documents[0].data[User.backgroundImage];
-          dataBase.updateProfile(backGround, phoneController.text);
+          dataBase.updateProfile(
+              backGround, phoneController.text, locationController.text, shopNameController.text, descriptionController.text);
+          print('profile updated without');
         });
       }
 

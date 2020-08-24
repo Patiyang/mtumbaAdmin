@@ -8,7 +8,8 @@ class UserDataBase {
   String users = 'users';
   // String profile = 'adminProfile';
 
-  createUser(String firstName, String lastName, String emailAddress, String password, String profilePicture, String phoneNumber) async {
+  createUser(String firstName, String lastName, String emailAddress, String password, String profilePicture, String phoneNumber,
+      String shopName) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var id = Uuid();
     String userId = id.v1();
@@ -21,20 +22,24 @@ class UserDataBase {
         User.email: emailAddress,
         User.id: userId,
         User.profilePicture: profilePicture,
-        User.phoneNumber:phoneNumber
+        User.phoneNumber: phoneNumber,
+        User.shopName: shopName
       });
     } catch (e) {
       print(e.toString());
     }
   }
 
-  updateProfile(String backgroundImage, String phoneNumber) async {
+  updateProfile(String backgroundImage, String phoneNumber, String location, String shopName, String description) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String profileId = prefs.getString(User.id);
     try {
       return _firestore.collection(users).document(profileId).updateData({
         User.backgroundImage: backgroundImage,
         User.phoneNumber: phoneNumber,
+        User.location:location,
+        User.shopName:shopName,
+        User.description:description
       });
     } catch (e) {
       print(e.toString());
@@ -52,6 +57,4 @@ class UserDataBase {
   getUserByEmail(String email) {
     return _firestore.collection(users).where(User.email, isEqualTo: email).getDocuments();
   }
-
- 
 }

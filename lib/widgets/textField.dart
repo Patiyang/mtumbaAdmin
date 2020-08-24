@@ -10,10 +10,11 @@ class CustomTextField extends StatelessWidget {
   final Color hintColor;
   final TextEditingController controller;
   final bool obscure;
-  final TextInputType textInputType;
+  final TextInputType keyBoardType;
   final TextAlign textAlign;
   final bool readOnly;
   final String initialValue;
+  final int maxLines;
 //validator components
   final validator;
   const CustomTextField({
@@ -26,35 +27,35 @@ class CustomTextField extends StatelessWidget {
     this.controller,
     this.validator,
     this.obscure,
-    this.textInputType,
+    this.keyBoardType,
     this.textAlign,
     this.readOnly,
     this.initialValue,
+    this.maxLines,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(30)), boxShadow: [
+      decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(10)), boxShadow: [
         BoxShadow(blurRadius: 0, color: containerColor ?? grey[200], offset: Offset(0, 0), spreadRadius: 0),
       ]),
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: 11),
         width: MediaQuery.of(context).size.width,
         child: TextFormField(
+          maxLines: maxLines ?? 1,
           initialValue: initialValue,
           readOnly: readOnly ?? false,
           textAlign: textAlign ?? TextAlign.center,
-          keyboardType: textInputType,
+          keyboardType: keyBoardType,
           obscureText: obscure ?? false,
           validator: validator,
           controller: controller,
           style: TextStyle(color: black),
           cursorColor: black,
           decoration: InputDecoration(
-              // icon: Icon(iconOne),
-              // prefixIcon: Icon(iconOne),
-              // suffixIcon: Icon(iconTwo),
+              icon: Icon(iconOne),
               border: InputBorder.none,
               hintText: hint,
               hintStyle: TextStyle(
