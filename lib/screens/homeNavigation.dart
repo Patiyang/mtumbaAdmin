@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../styling.dart';
-import 'manageItems/addProduct.dart';
+import 'manageItems/addProductFields.dart';
 import 'home.dart';
 import 'profile.dart';
 
