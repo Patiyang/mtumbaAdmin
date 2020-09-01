@@ -104,7 +104,7 @@ class _AddCategoryState extends State<AddCategory> {
                 Navigator.pop(context);
               } else {
                 await _categoryService.newCategory(categoryController.text);
-                Fluttertoast.showToast(msg: 'New Category added successfully', backgroundColor: grey[800])
+                Fluttertoast.showToast(msg: '${categoryController.text} added successfully', backgroundColor: grey[800])
                     .then((value) => categoryController.clear());
                 setState(() {
                   getCategories();

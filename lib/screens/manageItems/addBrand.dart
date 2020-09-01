@@ -31,7 +31,7 @@ class _AddBrandState extends State<AddBrand> {
       child: Column(
         children: [
           FloatingActionButton(
-            onPressed: () => categoryAlert(),
+            onPressed: () => brandAlert(),
             elevation: 0,
             backgroundColor: orange[300],
             child: Icon(
@@ -64,7 +64,7 @@ class _AddBrandState extends State<AddBrand> {
     );
   }
 
-  categoryAlert() {
+  brandAlert() {
     var alerts = AlertDialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       content: Container(
@@ -103,7 +103,7 @@ class _AddBrandState extends State<AddBrand> {
                 if (brandController.text != null) {
                   await brandService.newBrand(brandController.text);
                 }
-                Fluttertoast.showToast(msg: 'New brand added successfully', backgroundColor: grey[800]);
+                Fluttertoast.showToast(msg: '${brandController.text} added successfully', backgroundColor: grey[800]);
                 setState(() {
                   getBrands();
                 });

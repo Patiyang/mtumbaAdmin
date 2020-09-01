@@ -5,11 +5,11 @@ import 'package:uuid/uuid.dart';
 
 class ProductService {
   Firestore _firestore = Firestore.instance;
-  // UserDataBase _userDataBase = new UserDataBase();
   String ref = 'product';
   String users = 'adminUsers';
   QuerySnapshot snapshot;
   String location = '';
+  String shopName = '';
 
   void uploadProduct(String category, String brand, String productName, double productPrice, String productDescription,
       int productCount, String status, List<String> size, List<String> images, String delivery) async {
@@ -18,6 +18,8 @@ class ProductService {
     await _firestore.collection(users).where(User.email, isEqualTo: email).getDocuments().then((snap) {
       snapshot = snap;
       location = snap.documents[0].data[User.location];
+      shopName = snap.documents[0].data[User.shopName];
+      print('the shoPNAME Is $shopName');
     });
     String brandId;
     var id = Uuid();
@@ -34,7 +36,8 @@ class ProductService {
       'size': size,
       'images': images,
       'delivery': delivery,
-      'location': location
+      'location': location,
+      'shopName': shopName
     });
   }
 }

@@ -5,7 +5,7 @@ import 'package:uuid/uuid.dart';
 
 class UserDataBase {
   Firestore _firestore = Firestore.instance;
-  String users = 'users';
+  String users = 'adminUsers';
   // String profile = 'adminProfile';
 
   createUser(String firstName, String lastName, String emailAddress, String password, String profilePicture, String phoneNumber,
@@ -37,9 +37,9 @@ class UserDataBase {
       return _firestore.collection(users).document(profileId).updateData({
         User.backgroundImage: backgroundImage,
         User.phoneNumber: phoneNumber,
-        User.location:location,
-        User.shopName:shopName,
-        User.description:description
+        User.location: location,
+        User.shopName: shopName,
+        User.description: description
       });
     } catch (e) {
       print(e.toString());

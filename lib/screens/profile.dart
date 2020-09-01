@@ -56,10 +56,11 @@ class _ProfileState extends State<Profile> {
         Form(
           key: formKey,
           child: StreamBuilder(
-            stream: _firestore.collection('users').snapshots(),
+            stream: _firestore.collection('adminUsers').snapshots(),
             builder: (BuildContext context, AsyncSnapshot snapshot) {
               if (snapshot.hasData) {
                 DocumentSnapshot snap = snapshot.data.documents[0];
+                print(snap.data.length);
                 // profileImage = snap[User.profilePicture];
                 email = snap[User.email];
                 names = '${snap[User.firstName]} ' + '${snap[User.lastName]}';
@@ -150,7 +151,7 @@ class _ProfileState extends State<Profile> {
                       child: CustomTextField(
                         validator: (v) {
                           if (v.isEmpty) {
-                            return 'LOcation cannot be empty';
+                            return 'Location cannot be empty';
                           }
                           return null;
                         },
@@ -191,7 +192,7 @@ class _ProfileState extends State<Profile> {
                         },
                         // containerColor: white.withOpacity(.8),
                         iconOne: Icons.person,
-                        hint: 'Description',
+                        hint: 'Tell your customers about your business',
                         controller: descriptionController,
                         hintColor: grey,
                       ),
