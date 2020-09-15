@@ -10,22 +10,23 @@ class ProductService {
   QuerySnapshot snapshot;
   String location = '';
   String shopName = '';
+  String shopId = '';
 
   void uploadProduct(String category, String brand, String productName, double productPrice, String productDescription,
-      int productCount, String status, List<String> size, List<String> images, String delivery) async {
+      int productCount, String status, List<String> size, List<String> images, double deliveryPrice) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var email = prefs.getString(User.email);
     await _firestore.collection(users).where(User.email, isEqualTo: email).getDocuments().then((snap) {
       snapshot = snap;
       location = snap.documents[0].data[User.location];
       shopName = snap.documents[0].data[User.shopName];
-      print('the shoPNAME Is $shopName');
+      shopId = snap.documents[0].data[User.id];
     });
-    String brandId;
+    String productId;
     var id = Uuid();
-    brandId = id.v1();
-    _firestore.collection(ref).document(brandId).setData({
-      'id': brandId,
+    productId = id.v1();
+    _firestore.collection(ref).document(productId).setData({
+      'id': productId,
       'category': category,
       'brand': brand,
       'name': productName,
@@ -35,9 +36,10 @@ class ProductService {
       'status': status,
       'size': size,
       'images': images,
-      'delivery': delivery,
+      'delivery': deliveryPrice,
       'location': location,
-      'shopName': shopName
+      'shopName': shopName,
+      'shopId': shopId
     });
   }
 }

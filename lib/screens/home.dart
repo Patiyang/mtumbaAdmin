@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:mtumbaAdmin/provider/users/userProvider.dart';
 import 'package:mtumbaAdmin/screens/orders/cancelledOrders.dart';
 import 'package:mtumbaAdmin/screens/orders/completedOrders.dart';
 import 'package:mtumbaAdmin/screens/orders/newOrders.dart';
 import 'package:mtumbaAdmin/screens/orders/ongoingOrders.dart';
 import 'package:mtumbaAdmin/screens/orders/pastOrders.dart';
+import 'package:mtumbaAdmin/servicesDatabase/users/userProvider.dart';
 
 enum Pages { canceledOrders, completedOrders, newOrders, ongoingOrders, pastOrders }
 

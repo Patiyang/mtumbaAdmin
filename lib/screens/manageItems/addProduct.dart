@@ -5,9 +5,9 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:mtumbaAdmin/provider/brandCategoryClothing/brandDatabase.dart';
-import 'package:mtumbaAdmin/provider/brandCategoryClothing/categoryDatabase.dart';
-import 'package:mtumbaAdmin/provider/brandCategoryClothing/clothingDatabase.dart';
+import 'package:mtumbaAdmin/servicesDatabase/brandCategoryClothing/brandDatabase.dart';
+import 'package:mtumbaAdmin/servicesDatabase/brandCategoryClothing/categoryDatabase.dart';
+import 'package:mtumbaAdmin/servicesDatabase/brandCategoryClothing/clothingDatabase.dart';
 import 'package:mtumbaAdmin/styling.dart';
 import 'package:mtumbaAdmin/widgets/customText.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -56,6 +56,8 @@ class _AddClothingState extends State<AddClothing> {
     _getCategories();
     categoriesDropDown = getCategoriesDropDown();
     brandsDropDown = getBrandsDropDown();
+    deliveryPriceController.text = '0';
+    print(double.parse(deliveryPriceController.text));
     super.initState();
   }
 
@@ -72,40 +74,54 @@ class _AddClothingState extends State<AddClothing> {
                 children: <Widget>[
                   Expanded(
                     child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: OutlineButton(
-                          borderSide: BorderSide(color: grey[400], width: 1.5),
-                          onPressed: () {
+                        padding: const EdgeInsets.all(4.0),
+                        child: GestureDetector(
+                          onTap: () {
                             selectImage(ImagePicker.pickImage(source: ImageSource.gallery), 1);
                           },
-                          child: displayChild1()),
-                    ),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.all(Radius.circular(9)),
+                              color: grey[200],
+                            ),
+                            child: displayChild1(),
+                          ),
+                        )),
                   ),
                   SizedBox(height: 2),
                   Expanded(
                     child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: OutlineButton(
-                        borderSide: BorderSide(color: grey[400], width: 1.5),
-                        onPressed: () {
-                          selectImage(ImagePicker.pickImage(source: ImageSource.gallery), 2);
-                        },
-                        child: displayChild2(),
-                      ),
-                    ),
+                        padding: const EdgeInsets.symmetric(horizontal: 2.0, vertical: 2),
+                        child: GestureDetector(
+                          onTap: () {
+                            selectImage(ImagePicker.pickImage(source: ImageSource.gallery), 2);
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.all(Radius.circular(9)),
+                              color: grey[200],
+                            ),
+                            child: displayChild2(),
+                          ),
+                        )),
                   ),
+                  SizedBox(height: 2),
                   Expanded(
                     child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: OutlineButton(
-                        borderSide: BorderSide(color: grey[400], width: 1.5),
-                        onPressed: () {
-                          selectImage(ImagePicker.pickImage(source: ImageSource.gallery), 3);
-                        },
-                        child: displayChild3(),
-                      ),
-                    ),
-                  )
+                        padding: const EdgeInsets.all(4.0),
+                        child: GestureDetector(
+                          onTap: () {
+                            selectImage(ImagePicker.pickImage(source: ImageSource.gallery), 3);
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.all(Radius.circular(9)),
+                              color: grey[200],
+                            ),
+                            child: displayChild3(),
+                          ),
+                        )),
+                  ),
                 ],
               ),
               Padding(
@@ -148,7 +164,7 @@ class _AddClothingState extends State<AddClothing> {
                       if (index == 1) {
                         setState(() {
                           deliveryPrice = false;
-                          deliveryPriceController.clear();
+                          deliveryPriceController.text = '0';
                         });
                       }
                     },
@@ -479,7 +495,6 @@ class _AddClothingState extends State<AddClothing> {
         if (selectedSize.isNotEmpty) {
           if (deliveryPrice == true) {
             setState(() {
-              deliveryPriceController.text = 'Free delivery';
               print(deliveryPrice);
             });
           } else {
@@ -521,7 +536,7 @@ class _AddClothingState extends State<AddClothing> {
               groupValue,
               selectedSize,
               images,
-              deliveryPriceController.text,
+              double.parse(deliveryPriceController.text),
             );
 
             setState(() {
@@ -575,15 +590,19 @@ class _AddClothingState extends State<AddClothing> {
     if (_image1 == null) {
       return Padding(
         padding: const EdgeInsets.fromLTRB(16, 55, 16, 55),
-        child: Icon(Icons.add, color: grey),
+        child: Icon(Icons.add, color: black),
       );
     } else {
-      return Image.file(
-        _image1,
-        fit: BoxFit.cover,
-        width: double.infinity,
-        height: 137,
-      );
+      return ClipRRect(
+          child: Image.file(
+            _image1,
+            fit: BoxFit.cover,
+            width: double.infinity,
+            height: 137,
+          ),
+          borderRadius: BorderRadius.all(
+            Radius.circular(9),
+          ));
     }
   }
 
@@ -591,14 +610,19 @@ class _AddClothingState extends State<AddClothing> {
     if (_image2 == null) {
       return Padding(
         padding: const EdgeInsets.fromLTRB(16, 55, 16, 55),
-        child: Icon(Icons.add, color: grey),
+        child: Icon(Icons.add, color: black),
       );
     } else {
-      return Image.file(
-        _image2,
-        fit: BoxFit.cover,
-        width: double.infinity,
-        height: 137,
+      return ClipRRect(
+        borderRadius: BorderRadius.all(
+          Radius.circular(9),
+        ),
+        child: Image.file(
+          _image2,
+          fit: BoxFit.cover,
+          width: double.infinity,
+          height: 137,
+        ),
       );
     }
   }
@@ -607,14 +631,19 @@ class _AddClothingState extends State<AddClothing> {
     if (_image3 == null) {
       return Padding(
         padding: const EdgeInsets.fromLTRB(16, 55, 16, 55),
-        child: Icon(Icons.add, color: grey),
+        child: Icon(Icons.add, color: black),
       );
     } else {
-      return Image.file(
-        _image3,
-        fit: BoxFit.cover,
-        width: double.infinity,
-        height: 137,
+      return ClipRRect(
+        borderRadius: BorderRadius.all(
+          Radius.circular(9),
+        ),
+        child: Image.file(
+          _image3,
+          fit: BoxFit.cover,
+          width: double.infinity,
+          height: 137,
+        ),
       );
     }
   }

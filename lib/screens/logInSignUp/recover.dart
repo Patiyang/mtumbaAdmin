@@ -2,9 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:mtumbaAdmin/provider/users/userProvider.dart';
-import 'package:mtumbaAdmin/provider/users/usersDatabase.dart';
+
 import 'package:mtumbaAdmin/screens/logInSignUp/Login.dart';
+import 'package:mtumbaAdmin/servicesDatabase/users/userProvider.dart';
+import 'package:mtumbaAdmin/servicesDatabase/users/usersDatabase.dart';
 import 'package:mtumbaAdmin/widgets/customText.dart';
 import 'package:mtumbaAdmin/widgets/loading.dart';
 import 'package:mtumbaAdmin/widgets/textField.dart';
