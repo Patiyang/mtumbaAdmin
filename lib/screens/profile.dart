@@ -255,8 +255,7 @@ class _ProfileState extends State<Profile> {
           print('profile updated with image');
         }
       } else {
-        ///this section is for when the user just wants to update the phone Number
-        ///the same logic can also be applied to updating the profile picture
+        
         email = prefs.getString(User.email);
         dataBase.getUserByEmail(email).then((snap) {
           snapshot = snap;
