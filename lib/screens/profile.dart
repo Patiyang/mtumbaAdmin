@@ -6,8 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mtumbaAdmin/models/users.dart';
-import 'package:mtumbaAdmin/servicesDatabase/users/userProvider.dart';
-import 'package:mtumbaAdmin/servicesDatabase/users/usersDatabase.dart';
+import 'package:mtumbaAdmin/services/users/userProvider.dart';
+import 'package:mtumbaAdmin/services/users/usersDatabase.dart';
 import 'package:mtumbaAdmin/styling.dart';
 import 'package:mtumbaAdmin/widgets/favoritesButton.dart';
 import 'package:mtumbaAdmin/widgets/loading.dart';
@@ -29,6 +29,10 @@ class _ProfileState extends State<Profile> {
   final TextEditingController locationController = new TextEditingController();
   final TextEditingController descriptionController = new TextEditingController();
   final TextEditingController shopNameController = new TextEditingController();
+
+  final TextEditingController latitude = new TextEditingController();
+  final TextEditingController longitude = new TextEditingController();
+
   UserDataBase dataBase = new UserDataBase();
   StorageReference storage = FirebaseStorage.instance.ref();
 
@@ -207,7 +211,59 @@ class _ProfileState extends State<Profile> {
                       ),
                     ),
                     SizedBox(
-                      height: 20,
+                      height: 10,
+                    ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(vertical: 1.0, horizontal: 2),
+                            child: CustomTextField(
+                              validator: (v) {
+                                if (v.isEmpty) {
+                                  return 'ShopName cannot be empty';
+                                }
+                                return null;
+                              },
+                              // containerColor: white.withOpacity(.8),
+                              iconOne: Icons.person,
+                              hint: 'Latitude',
+                              controller: latitude,
+                              hintColor: grey,
+                            ),
+                          ),
+                        ),
+                        Container(
+                          padding: EdgeInsets.symmetric(horizontal: 4),
+                          child: FavoriteButton(
+                            callback: getCurrentLocation,
+                            text: 'Location',
+                            icon: Icons.directions,
+                            color: orange[300],
+                          ),
+                        ),
+                        Expanded(
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(vertical: 1.0, horizontal: 2),
+                            child: CustomTextField(
+                              validator: (v) {
+                                if (v.isEmpty) {
+                                  return 'ShopName cannot be empty';
+                                }
+                                return null;
+                              },
+                              // containerColor: white.withOpacity(.8),
+                              iconOne: Icons.person,
+                              hint: 'Longitude',
+                              controller: longitude,
+                              hintColor: grey,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 10,
                     ),
                     Container(
                       padding: EdgeInsets.symmetric(horizontal: 70),
@@ -255,14 +311,13 @@ class _ProfileState extends State<Profile> {
           print('profile updated with image');
         }
       } else {
-        
         email = prefs.getString(User.email);
         dataBase.getUserByEmail(email).then((snap) {
           snapshot = snap;
           backGround = snap.documents[0].data[User.backgroundImage];
           dataBase.updateProfile(
               backGround, phoneController.text, locationController.text, shopNameController.text, descriptionController.text);
-          print('profile updated without');
+          print('profile updated without image');
         });
       }
 
@@ -328,5 +383,9 @@ class _ProfileState extends State<Profile> {
         ),
       );
     }
+  }
+
+  getCurrentLocation() {
+    Fluttertoast.showToast(msg: 'todo: get user location');
   }
 }

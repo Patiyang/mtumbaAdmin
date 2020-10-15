@@ -46,7 +46,7 @@ class _AddProductState extends State<AddProduct> {
                   }),
               CustomFlatButton(
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(17))),
-                  text: 'Add Clothing',
+                  text: 'Add Product',
                   color: selectedPage == Pages.clothing ? orange[300] : grey[300],
                   callback: () {
                     setState(() {

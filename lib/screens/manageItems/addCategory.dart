@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mtumbaAdmin/models/users.dart';
-import 'package:mtumbaAdmin/servicesDatabase/brandCategoryClothing/categoryDatabase.dart';
+import 'package:mtumbaAdmin/services/brandCategoryClothing/categoryDatabase.dart';
 import 'package:mtumbaAdmin/styling.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -30,7 +30,6 @@ class _AddCategoryState extends State<AddCategory> {
     return Container(
       // height: MediaQuery.of(context).size.height,
       child: Column(
-      
         children: [
           FloatingActionButton(
             onPressed: () => categoryAlert(),
@@ -109,7 +108,8 @@ class _AddCategoryState extends State<AddCategory> {
                 setState(() {
                   getCategories();
                 });
-                Navigator.pop(context);
+                // Navigator.pop(context);
+                categoryController.clear();
               }
             });
           },

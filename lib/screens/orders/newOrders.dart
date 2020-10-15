@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mtumbaAdmin/servicesDatabase/users/userProvider.dart';
+import 'package:mtumbaAdmin/services/users/userProvider.dart';
 
 class NewOrders extends StatefulWidget {
   @override

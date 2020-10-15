@@ -5,9 +5,10 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:mtumbaAdmin/servicesDatabase/brandCategoryClothing/brandDatabase.dart';
-import 'package:mtumbaAdmin/servicesDatabase/brandCategoryClothing/categoryDatabase.dart';
-import 'package:mtumbaAdmin/servicesDatabase/brandCategoryClothing/clothingDatabase.dart';
+import 'package:mtumbaAdmin/services/brandCategoryClothing/brandDatabase.dart';
+import 'package:mtumbaAdmin/services/brandCategoryClothing/categoryDatabase.dart';
+import 'package:mtumbaAdmin/services/brandCategoryClothing/clothingDatabase.dart';
+
 import 'package:mtumbaAdmin/styling.dart';
 import 'package:mtumbaAdmin/widgets/customText.dart';
 import 'package:shared_preferences/shared_preferences.dart';

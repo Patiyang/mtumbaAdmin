@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:mtumbaAdmin/screens/orders/cancelledOrders.dart';
 import 'package:mtumbaAdmin/screens/orders/completedOrders.dart';
-import 'package:mtumbaAdmin/screens/orders/newOrders.dart';
 import 'package:mtumbaAdmin/screens/orders/ongoingOrders.dart';
-import 'package:mtumbaAdmin/screens/orders/pastOrders.dart';
-import 'package:mtumbaAdmin/servicesDatabase/users/userProvider.dart';
+import 'package:mtumbaAdmin/services/users/userProvider.dart';
 
 enum Pages { canceledOrders, completedOrders, newOrders, ongoingOrders, pastOrders }
 
@@ -19,13 +16,15 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   UserProvider userProvider = new UserProvider();
   String appBarTitle;
   TabController _tabController;
-  final List<String> titles = ['New Orders', 'Ongoing Orders', 'Completed Orders', 'Canceled Orders', 'Past Orders'];
+  // final List<String> titles = ['New Orders', 'Ongoing Orders', 'Completed Orders', 'Canceled Orders', 'Past Orders'];
+  final List<String> titles = ['Ongoing Orders', 'Completed Orders'];
+
   int currentTab = 0;
 
   @override
   void initState() {
     appBarTitle = titles[0];
-    _tabController = TabController(length: 5, vsync: this);
+    _tabController = TabController(length: 2, vsync: this);
     _tabController.addListener(changeTitle);
     super.initState();
   }
@@ -33,7 +32,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 5,
+      length: 2,
       child: Scaffold(
           body: CustomScrollView(
         slivers: [
@@ -42,7 +41,8 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
             title: Text(appBarTitle),
             pinned: true,
             floating: true,
-            bottom: TabBar(controller: _tabController,
+            bottom: TabBar(
+                controller: _tabController,
                 onTap: (index) {
                   setState(() {
                     appBarTitle = titles[index];
@@ -50,23 +50,24 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                 },
                 isScrollable: true,
                 tabs: [
-                  Tab(text: 'New Orders'),
+                  // Tab(text: 'New Orders'),
                   Tab(text: 'Ongoing Orders'),
                   Tab(text: 'Completed Orders'),
-                  Tab(text: 'Canceled Orders'),
-                  Tab(text: 'Past Orders')
+                  // Tab(text: 'Canceled Orders'),
+                  // Tab(text: 'Past Orders')
                 ]),
           ),
           SliverToBoxAdapter(
             child: Container(
               height: MediaQuery.of(context).size.height,
-              child: TabBarView(controller: _tabController,
+              child: TabBarView(
+                controller: _tabController,
                 children: [
-                  NewOrders(),
+                  // NewOrders(),
                   OngoingOrders(),
                   CompletedOrders(),
-                  CancelledOrders(),
-                  PastOrders(),
+                  // CancelledOrders(),
+                  // PastOrders(),
                 ],
               ),
             ),
@@ -75,8 +76,6 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
       )),
     );
   }
-
-  
 
   changeTitle() {
     setState(() {

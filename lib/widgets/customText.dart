@@ -30,3 +30,22 @@ class CustomText extends StatelessWidget {
     );
   }
 }
+
+class CartItemRich extends StatelessWidget {
+  final String lightFont;
+  final String boldFont;
+  final double lightFontSize;
+  final double boldFontSize;
+  final double letterSpacing;
+  const CartItemRich({Key key, this.lightFont, this.boldFont, this.lightFontSize, this.boldFontSize, this.letterSpacing}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return RichText(
+      text: TextSpan(children: [
+        TextSpan(text: lightFont, style: TextStyle(color: black.withOpacity(.6), fontSize: lightFontSize ?? 13, fontWeight: FontWeight.bold)),
+        TextSpan(text: boldFont, style: TextStyle(color: black, fontSize: boldFontSize ?? 15, fontWeight: FontWeight.bold, letterSpacing: letterSpacing)),
+      ]),
+    );
+  }
+}
