@@ -269,7 +269,7 @@ class _RegisterState extends State<Register> {
                 .then((value) {
                   prefs.setString(User.email, emailController.text);
                 })
-                .then((value) => userDataBase.updateProfile('', phoneNumberController.text, '', shopNameController.text, ''))
+                .then((value) => userDataBase.updateProfile('', phoneNumberController.text, '', shopNameController.text, '','',''))
                 .then((value) => Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => HomeNavigation())));
           }
         } else {

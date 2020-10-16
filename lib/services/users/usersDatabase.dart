@@ -30,7 +30,7 @@ class UserDataBase {
     }
   }
 
-  updateProfile(String backgroundImage, String phoneNumber, String location, String shopName, String description) async {
+  updateProfile(String backgroundImage, String phoneNumber, String location, String shopName, String description, String longitude, String latitude) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String profileId = prefs.getString(User.id);
     try {
@@ -39,7 +39,9 @@ class UserDataBase {
         User.phoneNumber: phoneNumber,
         User.location: location,
         User.shopName: shopName,
-        User.description: description
+        User.description: description, 
+        User.latitude:latitude,
+        User.longitude:longitude
       });
     } catch (e) {
       print(e.toString());

@@ -9,6 +9,8 @@ class User {
   static const String phoneNumber = 'phoneNumber';
   static const String description = 'description';
   static const String location = 'location';
+  static const String longitude = 'longitude';
+  static const String latitude = 'latitude';
   static const String shopName = 'shopName';
 
   String userId;

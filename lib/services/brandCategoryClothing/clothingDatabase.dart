@@ -11,6 +11,7 @@ class ProductService {
   String location = '';
   String shopName = '';
   String shopId = '';
+  String phoneNumber = '';
 
   void uploadProduct(String category, String brand, String productName, double productPrice, String productDescription,
       int productCount, String status, List<String> size, List<String> images, double deliveryPrice) async {
@@ -21,6 +22,7 @@ class ProductService {
       location = snap.documents[0].data[User.location];
       shopName = snap.documents[0].data[User.shopName];
       shopId = snap.documents[0].data[User.id];
+      phoneNumber = snap.documents[0].data[User.phoneNumber];
     });
     String productId;
     var id = Uuid();
@@ -39,7 +41,8 @@ class ProductService {
       'delivery': deliveryPrice,
       'location': location,
       'shopName': shopName,
-      'shopId': shopId
+      'shopId': shopId,
+      'phone':phoneNumber
     });
   }
 }

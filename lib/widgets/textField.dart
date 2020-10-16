@@ -52,6 +52,7 @@ class CustomTextField extends StatelessWidget {
         style: TextStyle(color: black),
         cursorColor: black,
         decoration: InputDecoration(
+            // contentPadding: EdgeInsets.symmetric(vertical: 10),
             // icon: Icon(iconOne),
             border: InputBorder.none,
             hintText: hint,

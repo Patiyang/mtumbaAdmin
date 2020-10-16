@@ -4,7 +4,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:latlng/latlng.dart';
 import 'package:mtumbaAdmin/models/users.dart';
 import 'package:mtumbaAdmin/services/users/userProvider.dart';
 import 'package:mtumbaAdmin/services/users/usersDatabase.dart';
@@ -29,9 +31,18 @@ class _ProfileState extends State<Profile> {
   final TextEditingController locationController = new TextEditingController();
   final TextEditingController descriptionController = new TextEditingController();
   final TextEditingController shopNameController = new TextEditingController();
-
+//variables for fetching the admin's location
+  LatLng currentPostion;
   final TextEditingController latitude = new TextEditingController();
   final TextEditingController longitude = new TextEditingController();
+  _getUserLocation() async {
+    var position = await GeolocatorPlatform.instance.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    currentPostion = LatLng(position.latitude, position.longitude);
+    setState(() {
+      longitude.text = currentPostion.longitude.toString();
+      latitude.text = currentPostion.latitude.toString();
+    });
+  }
 
   UserDataBase dataBase = new UserDataBase();
   StorageReference storage = FirebaseStorage.instance.ref();
@@ -201,15 +212,6 @@ class _ProfileState extends State<Profile> {
                         hintColor: grey,
                       ),
                     ),
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal: 80),
-                      child: FavoriteButton(
-                        callback: updateInfo,
-                        text: 'Update Info',
-                        icon: Icons.update,
-                        color: orange[300],
-                      ),
-                    ),
                     SizedBox(
                       height: 10,
                     ),
@@ -236,7 +238,7 @@ class _ProfileState extends State<Profile> {
                         Container(
                           padding: EdgeInsets.symmetric(horizontal: 4),
                           child: FavoriteButton(
-                            callback: getCurrentLocation,
+                            callback: _getUserLocation,
                             text: 'Location',
                             icon: Icons.directions,
                             color: orange[300],
@@ -261,6 +263,15 @@ class _ProfileState extends State<Profile> {
                           ),
                         ),
                       ],
+                    ),
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: 80),
+                      child: FavoriteButton(
+                        callback: updateInfo,
+                        text: 'Update Info',
+                        icon: Icons.update,
+                        color: orange[300],
+                      ),
                     ),
                     SizedBox(
                       height: 10,
@@ -306,8 +317,8 @@ class _ProfileState extends State<Profile> {
         if (snap.error == null) {
           backImage = await snap.ref.getDownloadURL();
           backGround = backImage;
-          dataBase.updateProfile(
-              backImage, phoneController.text, locationController.text, shopNameController.text, descriptionController.text);
+          dataBase.updateProfile(backImage, phoneController.text, locationController.text, shopNameController.text,
+              descriptionController.text, latitude.text, longitude.text);
           print('profile updated with image');
         }
       } else {
@@ -315,8 +326,8 @@ class _ProfileState extends State<Profile> {
         dataBase.getUserByEmail(email).then((snap) {
           snapshot = snap;
           backGround = snap.documents[0].data[User.backgroundImage];
-          dataBase.updateProfile(
-              backGround, phoneController.text, locationController.text, shopNameController.text, descriptionController.text);
+          dataBase.updateProfile(backGround, phoneController.text, locationController.text, shopNameController.text,
+              descriptionController.text, latitude.text, longitude.text);
           print('profile updated without image');
         });
       }
@@ -351,6 +362,8 @@ class _ProfileState extends State<Profile> {
       descriptionController.text = '${snap.documents[0].data[User.description]}' ?? '';
       shopNameController.text = '${snap.documents[0].data[User.shopName]}' ?? '';
       locationController.text = '${snap.documents[0].data[User.location]}' ?? '';
+      longitude.text='${snap.documents[0].data[User.longitude]}' ?? '';
+      latitude.text='${snap.documents[0].data[User.latitude]}' ?? '';
     });
   }
 
@@ -383,9 +396,5 @@ class _ProfileState extends State<Profile> {
         ),
       );
     }
-  }
-
-  getCurrentLocation() {
-    Fluttertoast.showToast(msg: 'todo: get user location');
   }
 }
